@@ -64,7 +64,5 @@ def get_puuid(data):
 if __name__ == "__main__":
     # libary is meant to be used as a module
     # so this is only used for testing
-    data = get_player("MayNiklas", "Niki")
-    print(get_elo(data))
-    print(get_rank_tier(data))
-    print(get_rank(data))
+    data = get_player_json("MayNiklas", "Niki")
+    print(data)

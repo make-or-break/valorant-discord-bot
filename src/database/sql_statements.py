@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy import update
 
-import sql_scheme as db
+import database.sql_scheme as db
 
 
 def add_player(id, username, elo, rank, rank_tier, tagline, puuid, session=db.open_session()):

@@ -8,10 +8,13 @@ def get_player(Username, Tagline):
     """
 
     api_url = "https://api.henrikdev.xyz/valorant/v2/mmr/eu/"+Username+"/"+Tagline
-    response = requests.get(api_url)
-    data = response.json()
 
-    return(data)
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        return(response.json())
+    else:
+        return(None)
 
 
 def get_player_by_puuid(puuid):

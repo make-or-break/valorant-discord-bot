@@ -1,8 +1,8 @@
 {
-  description = "get valorant rank from API";
+  description = "valorant discord bot";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -26,7 +26,9 @@
               version = "0.1";
 
               src = self;
-              propagatedBuildInputs = [ discordpy requests sqlalchemy setuptools ];
+              # 403 Forbidden when using requests 2.27.0
+              # -> had to use nixos-21.11 as flake input!
+              propagatedBuildInputs = [ discordpy requests sqlalchemy ];
               doCheck = false;
 
               pythonImportsCheck = [
@@ -43,7 +45,7 @@
               '';
 
               meta = with pkgs.lib; {
-                description = "get valorant rank from API";
+                description = "valorant discord bot";
                 homepage = "https://github.com/MayNiklas/discord-bot-valorant-rank/";
                 platforms = platforms.unix;
                 maintainers = with maintainers; [ mayniklas ];

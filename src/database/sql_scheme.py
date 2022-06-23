@@ -35,9 +35,10 @@ try:
         name = Column(String)
         color = Column(String)
         elo = Column(Integer)
+        rank_tier = Column(Integer)
 
         def __repr__(self):
-            return f"id='{self.id}', name='{self.name}', color='{self.color}', elo='{self.elo}'"
+            return f"id='{self.id}', name='{self.name}', color='{self.color}', elo='{self.elo}', rank_tier='{self.rank_tier}'"
 
     Base.metadata.create_all(engine)
 

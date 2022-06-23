@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 def get_elo(Username, Tagline):
@@ -20,11 +21,9 @@ def get_rank(elo):
     Get the rank of a player.
     """
 
-    print("elo: " + str(elo))
-
-    # get the rank from the elo
-    # need to map ELO to rank
+    if elo < 1000:
+        return("Unranked")
 
 
 if __name__ == "__main__":
-    get_rank(get_elo("MayNiklas", "Niki"))
+    print(get_rank((get_elo("MayNiklas", "Niki"))))

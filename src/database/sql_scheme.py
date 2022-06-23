@@ -1,9 +1,8 @@
 import os
 import sys
-from turtle import color
 import sqlalchemy
 
-from sqlalchemy.orm import declarative_base, logger
+from sqlalchemy.orm import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker

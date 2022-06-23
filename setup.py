@@ -5,14 +5,19 @@ with open('requirements.txt') as f:
     install_requires = f.read().splitlines()
 
 setup(
-    name='discord_bot',
+    install_requires=install_requires,
+    name='valorant-discord-bot',
     version='0.1',
     url='',
     license='',
     author='MayNiklas',
     author_email='info@niklas-steffen.de',
     description='',
-    install_requires=install_requires,
     package_dir={'': 'src/'},
     packages=find_packages(where='src/'),
+    entry_points={
+        'console_scripts': [
+            'valorant-discord-bot=discord_bot:start_bot',
+        ]
+    }
 )

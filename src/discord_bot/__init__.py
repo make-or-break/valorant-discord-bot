@@ -1,4 +1,5 @@
-from .main import main as discord_bot_main
+from .main import start_bot
 
-if __name__ == "__main__":
-    discord_bot_main()
+
+def main():
+    start_bot()

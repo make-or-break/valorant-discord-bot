@@ -9,10 +9,5 @@ setup(
     author_email='info@niklas-steffen.de',
     description='',
     package_dir={'': 'src/'},
-    packages=find_packages(where='src/'),
-    entry_points={
-        'console_scripts': [
-            'get_valorant_rank=get_valorant_rank:get_rank',
-        ],
-    },
+    packages=find_packages(where='src/')
 )

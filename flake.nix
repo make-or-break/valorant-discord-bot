@@ -17,14 +17,14 @@
         # Use nixpkgs-fmt for `nix fmt'
         formatter = pkgs.nixpkgs-fmt;
 
-        defaultPackage = packages.get_valorant_rank;
+        defaultPackage = packages.discord_bot;
         packages = flake-utils.lib.flattenTree rec {
 
-          get_valorant_rank = with pkgs.python3Packages;
+          discord_bot = with pkgs.python3Packages;
             pkgs.python3Packages.buildPythonPackage rec {
-              pname = "get_valorant_rank";
+              pname = "discord_bot";
               version = "0.1";
-              propagatedBuildInputs = [ requests ];
+              propagatedBuildInputs = [ discordpy requests sqlalchemy ];
               doCheck = false;
               src = self;
               meta = with pkgs.lib; {

@@ -6,14 +6,12 @@ from discord.ext import tasks
 
 import re
 
-from discord_bot.database.sql_statements import add_player, update_player
-from discord_bot.valorant.main import get_puuid
+#from discord_bot.database.sql_statements import add_player, update_player
+#from discord_bot.valorant.main import get_puuid
 
 from ..log_setup import logger
 from ..utils import utils as ut
 
-from ..valorant import *
-from ..database import *
 from discord_bot import valorant
 
 from discord_bot import database
@@ -47,8 +45,7 @@ class Onboarding(commands.Cog):
         print(f"Onboarding DM sent to {member.name}, waiting for response.")
 
         def check_response(res):
-            return res.channel.type == discord.ChannelType.private and res.author == member #TODO: regex check außerhalb, wenn author und channel stimmt, um error message zu senden
-
+            return res.channel.type == discord.ChannelType.private and res.author == member
         valid = False
         while not valid:
             response = await self.client.wait_for('message', check=check_response)
@@ -59,7 +56,29 @@ class Onboarding(commands.Cog):
 
         player = response.split('#')
         player_json = valorant.get_player_json(player[0], player[1])
-        database.add_player(id=member.id, username=player[0], elo=get_elo(player_json), rank=get_rank(player_json), rank_tier=get_rank_tier(player_json), tagline=player[1], puuid=get_puuid(player_json))
+        database.add_player(id=member.id, username=player[0], elo=valorant.get_elo(player_json), rank=valorant.get_rank(player_json), rank_tier=valorant.get_rank_tier(player_json), tagline=player[1], puuid=valorant.get_puuid(player_json))
+
+        # create a new role in the guild with name get_elo(player_json) if that role does not exist
+        elo_key = int(valorant.get_elo(player_json) / 100) * 100
+        role = discord.utils.get(member.guild.roles, name=database.get_role_by_elo(elo_key).name)
+        if not role:
+            role = await member.guild.create_role(name=database.get_role_by_elo(elo_key).name, color=discord.Color(database.get_role_by_elo(elo_key).color))
+
+        # add the role to the user
+        await member.add_roles(role)
+
+
+        # generate role from db data with elo
+        
+
+
+
+
+
+
+
+
+
 
         await member.send("Thanks! Your Valorant Account is now connected!")
 

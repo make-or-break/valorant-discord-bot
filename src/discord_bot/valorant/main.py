@@ -50,6 +50,14 @@ def get_rank_tier(data):
     return (data["data"]["current_data"]["currenttier"])
 
 
+def get_puuid(data):
+    """
+    Get the puuid of a player.
+    """
+
+    return (data["data"]["puuid"])
+
+
 if __name__ == "__main__":
     # libary is meant to be used as a module
     # so this is only used for testing

@@ -18,8 +18,9 @@ try:
 
     class Player(Base):
         __tablename__ = 'players'
-        id = Column(Integer, primary_key=True)
         elo = Column(Integer)
+        id = Column(Integer, primary_key=True)
+        puuid = Column(String)
         rank = Column(String)
         rank_tier = Column(Integer)
         tagline = Column(String)

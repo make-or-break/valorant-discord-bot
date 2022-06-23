@@ -2,7 +2,7 @@ import requests
 import json
 
 
-def get_player(Username, Tagline):
+def get_player_json(Username, Tagline):
     """
     Get the json data of a player.
     """
@@ -17,7 +17,7 @@ def get_player(Username, Tagline):
         return(None)
 
 
-def get_player_by_puuid(puuid):
+def get_player_json_by_puuid(puuid):
     """
     Get the json data of a player by puuid.
     """

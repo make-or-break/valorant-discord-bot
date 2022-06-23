@@ -58,10 +58,9 @@ class Onboarding(commands.Cog):
         database.add_player(id=member.id, username=player[0], elo=valorant.get_elo(player_json), rank=valorant.get_rank(player_json), rank_tier=valorant.get_rank_tier(player_json), tagline=player[1], puuid=valorant.get_puuid(player_json))
 
         # create a new role in the guild with name get_elo(player_json) if that role does not exist
-        elo_key = int(valorant.get_elo(player_json) / 100) * 100
-        role = discord.utils.get(member.guild.roles, name=database.get_role_by_elo(elo_key).name)
+        role = discord.utils.get(member.guild.roles, name=database.get_role_by_rank_tier(valorant.get_rank_tier(player_json)).name)
         if not role:
-            role = await member.guild.create_role(name=database.get_role_by_elo(elo_key).name, color=discord.Color(database.get_role_by_elo(elo_key).color))
+            role = await member.guild.create_role(name=database.get_role_by_rank_tier(valorant.get_rank_tier(player_json)).name, color=discord.Color(database.get_role_by_rank_tier(valorant.get_rank_tier(player_json)).color))
 
         # add the role to the user
         await member.add_roles(role)

@@ -63,8 +63,8 @@ def get_role(id, session=db.open_session()):
     """
     return session.query(db.Roles).filter(db.Roles.id == id).first()
 
-def get_role_by_elo(elo, session=db.open_session()):
+def get_role_by_rank_tier(rank_tier, session=db.open_session()):
     """
     Get the role from the database
     """
-    return session.query(db.Roles).filter(db.Roles.elo == elo).first()
+    return session.query(db.Roles).filter(db.Roles.rank_tier == rank_tier).first()

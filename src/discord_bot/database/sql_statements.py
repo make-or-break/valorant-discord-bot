@@ -16,6 +16,20 @@ def add_player(id, username, elo, rank, rank_tier, tagline, puuid, session=db.op
     session.commit()
 
 
+def update_player(id, elo, rank, rank_tier, tagline, username, session=db.open_session()):
+    """
+    Update the player in the database
+    """
+    session.query(db.Players).filter(db.Players.id == id).update({
+        'elo': elo,
+        'rank': rank,
+        'rank_tier': rank_tier,
+        'tagline': tagline,
+        'username': username
+    })
+    session.commit()
+
+
 def get_player(id, session=db.open_session()):
     """
     Get the player from the database

@@ -21,6 +21,9 @@ python3 -m venv .venv
 # use virtual environment
 source .venv/bin/activate
 
+# install packages
+pip3 install .
+
 # install dependencies from requirements.txt
 pip3 install -r requirements.txt
 

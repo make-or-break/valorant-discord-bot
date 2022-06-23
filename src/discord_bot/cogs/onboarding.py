@@ -6,13 +6,17 @@ from discord.ext import tasks
 
 import re
 
-from discord_bot.database.sql_statements import update_player
+from discord_bot.database.sql_statements import add_player, update_player
+from discord_bot.valorant.main import get_puuid
 
 from ..log_setup import logger
 from ..utils import utils as ut
 
 from ..valorant import *
 from ..database import *
+from discord_bot import valorant
+
+from discord_bot import database
 
 
 ### @package misc
@@ -54,8 +58,8 @@ class Onboarding(commands.Cog):
                 await member.send("Error: Please send a valid name and tagline in the following format: <name>#<tagline>")
 
         player = response.split('#')
-        player_json = get_player_json(get_player_json(player[0], player[1]))
-        update_player("id", get_elo(player_json), get_rank(player_json), get_rank_tier(player_json), player[0], player[1])
+        player_json = valorant.get_player_json(player[0], player[1])
+        database.add_player(id=member.id, username=player[0], elo=get_elo(player_json), rank=get_rank(player_json), rank_tier=get_rank_tier(player_json), tagline=player[1], puuid=get_puuid(player_json))
 
         await member.send("Thanks! Your Valorant Account is now connected!")
 

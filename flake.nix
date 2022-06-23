@@ -17,16 +17,21 @@
         # Use nixpkgs-fmt for `nix fmt'
         formatter = pkgs.nixpkgs-fmt;
 
-        defaultPackage = packages.discord_bot;
+        defaultPackage = packages.valorant-discord-bot;
         packages = flake-utils.lib.flattenTree rec {
 
-          discord_bot = with pkgs.python3Packages;
+          valorant-discord-bot = with pkgs.python3Packages;
             pkgs.python3Packages.buildPythonPackage rec {
-              pname = "discord_bot";
+              pname = "valorant-discord-bot";
               version = "0.1";
               propagatedBuildInputs = [ discordpy requests sqlalchemy ];
               doCheck = false;
               src = self;
+              # removes install_requires from the setup.py
+              # version numbers of discord.py are still broken
+              preBuild = ''
+                sed -i '8d' setup.py
+              '';
               meta = with pkgs.lib; {
                 description = "get valorant rank from API";
                 homepage = "https://github.com/MayNiklas/discord-bot-valorant-rank/";

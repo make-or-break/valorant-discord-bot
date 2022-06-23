@@ -14,6 +14,18 @@ def get_player(Username, Tagline):
     return(data)
 
 
+def get_player_by_puuid(puuid):
+    """
+    Get the json data of a player by puuid.
+    """
+
+    api_url = "https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/eu/"+puuid
+    response = requests.get(api_url)
+    data = response.json()
+
+    return(data)
+
+
 def get_elo(data):
     """
     Get the elo of a player.

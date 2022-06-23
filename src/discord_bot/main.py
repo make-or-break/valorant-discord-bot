@@ -65,7 +65,7 @@ async def on_ready():
     bot.remove_command('help')  # unload default help message
     # TODO: Register your extensions here
     initial_extensions = [
-        '.cogs.misc',
+        '.cogs.onboarding',
         '.cogs.help'
     ]
 

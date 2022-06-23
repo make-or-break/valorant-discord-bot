@@ -17,12 +17,12 @@
         # Use nixpkgs-fmt for `nix fmt'
         formatter = pkgs.nixpkgs-fmt;
 
-        defaultPackage = packages.valorant_get_rank;
+        defaultPackage = packages.get_valorant_rank;
         packages = flake-utils.lib.flattenTree rec {
 
-          valorant_get_rank = with pkgs.python3Packages;
+          get_valorant_rank = with pkgs.python3Packages;
             pkgs.python3Packages.buildPythonPackage rec {
-              pname = "valorant_get_rank";
+              pname = "get_valorant_rank";
               version = "0.1";
               propagatedBuildInputs = [ requests ];
               doCheck = false;

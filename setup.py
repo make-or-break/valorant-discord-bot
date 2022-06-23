@@ -12,7 +12,7 @@ setup(
     packages=find_packages(where='src/'),
     entry_points={
         'console_scripts': [
-            'valorant_get_rank=valorant_rank_bot:get_rank',
+            'get_valorant_rank=get_valorant_rank:get_rank',
         ],
     },
 )

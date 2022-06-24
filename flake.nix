@@ -98,6 +98,20 @@
         # Use nixpkgs-fmt for `nix fmt'
         formatter = pkgs.nixpkgs-fmt;
 
+        devShells = flake-utils.lib.flattenTree {
+          # nix develop .#
+          default =
+            let
+              python38-with-dependencies = pkgs.python38.withPackages (p: with p; [
+                discordpy
+                requests
+                sqlalchemy
+              ]);
+            in
+            python38-with-dependencies.env;
+        };
+
+
         defaultPackage = packages.valorant-discord-bot;
         packages = flake-utils.lib.flattenTree rec {
 

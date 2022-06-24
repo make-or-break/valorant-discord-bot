@@ -56,12 +56,12 @@ class Onboarding(commands.Cog):
 
         player = response.split('#')
         player_json = valorant.get_player_json(player[0], player[1])
-        database.add_player(id=member.id, username=player[0], elo=valorant.get_elo(player_json), rank=valorant.get_rank(player_json), rank_tier=valorant.get_rank_tier(player_json), tagline=player[1], puuid=valorant.get_puuid(player_json))
+        db.add_player(id=member.id, username=player[0], elo=valorant.get_elo(player_json), rank=valorant.get_rank(player_json), rank_tier=valorant.get_rank_tier(player_json), tagline=player[1], puuid=valorant.get_puuid(player_json))
 
         # create a new role in the guild with name get_elo(player_json) if that role does not exist
-        role = discord.utils.get(member.guild.roles, name=database.get_role_by_rank_tier(valorant.get_rank_tier(player_json)).name)
+        role = discord.utils.get(member.guild.roles, name=db.get_role_by_rank_tier(valorant.get_rank_tier(player_json)).name)
         if not role:
-            role = await member.guild.create_role(name=database.get_role_by_rank_tier(valorant.get_rank_tier(player_json)).name, color=discord.Color(database.get_role_by_rank_tier(valorant.get_rank_tier(player_json)).color))
+            role = await member.guild.create_role(name=db.get_role_by_rank_tier(valorant.get_rank_tier(player_json)).name, color=discord.Color(db.get_role_by_rank_tier(valorant.get_rank_tier(player_json)).color))
 
         # add the role to the user
         await member.add_roles(role)

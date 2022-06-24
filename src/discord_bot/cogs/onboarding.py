@@ -9,11 +9,11 @@ import re
 #from discord_bot.valorant.main import get_puuid
 
 from ..log_setup import logger
-from ..utils import utils as ut
+# from ..utils import utils as ut
 
-from discord_bot import valorant
-
-from discord_bot import database
+import valorant
+from database import sql_scheme
+from database import sql_statements as db
 
 
 ### @package misc
@@ -49,7 +49,7 @@ class Onboarding(commands.Cog):
         valid = False
         while not valid:
             response = await self.client.wait_for('message', check=check_response)
-            if (re.search(re.compile(ur'\b(.{3,16}#.{3,5})\b'), response.content)):
+            if (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), response.content)):
                 valid = True
             else:
                 await member.send("Error: Please send a valid name and tagline in the following format: <name>#<tagline>")
@@ -65,7 +65,7 @@ class Onboarding(commands.Cog):
 
         # add the role to the user
         await member.add_roles(role)
-        logger.info(f"Added role {role.name} to User {member.name}!"
+        logger.info(f"Added role {role.name} to User {member.name}!")
 
         await member.send("Thanks! Your Valorant Account is now connected!")
 

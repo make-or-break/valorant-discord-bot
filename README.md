@@ -1,4 +1,4 @@
-# discord-bot-valorant-rank
+# valorant-discord-bot
 
 ## Usage
 

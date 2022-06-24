@@ -29,17 +29,6 @@ try:
         def __repr__(self):
             return f"id='{self.id}', username='{self.username}', tagline='{self.tagline}', elo='{self.elo}', rank='{self.rank}', rank_tier='{self.rank_tier}'"
 
-    class Role(Base):
-        __tablename__ = 'roles'
-        id = Column(Integer, primary_key=True)
-        name = Column(String)
-        color = Column(String)
-        elo = Column(Integer)
-        rank_tier = Column(Integer)
-
-        def __repr__(self):
-            return f"id='{self.id}', name='{self.name}', color='{self.color}', elo='{self.elo}', rank_tier='{self.rank_tier}'"
-
     Base.metadata.create_all(engine)
 
     @event.listens_for(Base.metadata, 'after_create')

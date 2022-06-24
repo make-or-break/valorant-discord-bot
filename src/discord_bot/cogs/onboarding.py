@@ -48,13 +48,13 @@ class Onboarding(commands.Cog):
             return res.channel.type == discord.ChannelType.private and res.author == member
         valid = False
         while not valid:
-            response = await self.client.wait_for('message', check=check_response)
+            response = await self.bot.wait_for('message', check=check_response)
             if (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), response.content)):
                 valid = True
             else:
                 await member.send("Error: Please send a valid name and tagline in the following format: <name>#<tagline>")
 
-        player = response.split('#')
+        player = response.content.split('#')
         player_json = valorant.get_player_json(player[0], player[1])
         db.add_player(id=member.id, username=player[0], elo=valorant.get_elo(player_json), rank=valorant.get_rank(player_json), rank_tier=valorant.get_rank_tier(player_json), tagline=player[1], puuid=valorant.get_puuid(player_json))
 

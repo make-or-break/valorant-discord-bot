@@ -27,6 +27,7 @@ class Onboarding(commands.Cog):
     """
 
     def __init__(self, bot):
+        logger.info("Onboarding cog initialized!");
         self.bot: commands.Bot = bot
 
     # Event listener, wich does an onboarding flow if a new user is joining.
@@ -38,10 +39,10 @@ class Onboarding(commands.Cog):
         try:
             await member.send(message)
         except:
-            print('Could not DM user, closed DMs.')
+            logger.info('Could not DM user, closed DMs.')
             exit
 
-        print(f"Onboarding DM sent to {member.name}, waiting for response.")
+        logger.info(f"Onboarding DM sent to {member.name}, waiting for response.")
 
         def check_response(res):
             return res.channel.type == discord.ChannelType.private and res.author == member
@@ -64,21 +65,10 @@ class Onboarding(commands.Cog):
 
         # add the role to the user
         await member.add_roles(role)
-
-
-        # generate role from db data with elo
-        
-
-
-
-
-
-
-
-
-
+        logger.info(f"Added role {role.name} to User {member.name}!"
 
         await member.send("Thanks! Your Valorant Account is now connected!")
 
 def setup(bot):
+    logger.info("Onboarding cog set up!");
     bot.add_cog(Onboarding(bot))

@@ -63,6 +63,7 @@ async def on_ready():
     # LOADING Extensions
     # this is done in on_ready() so that cogs can fetch data from discord when they're loaded
     bot.remove_command('help')  # unload default help message
+
     # TODO: Register your extensions here
     initial_extensions = [
         '.cogs.onboarding',
@@ -70,7 +71,9 @@ async def on_ready():
     ]
 
     for extension in initial_extensions:
+        logger.info(f"Trying to load {extension} from {__package__}!")
         bot.load_extension(extension, package=__package__)
+        logger.info(f"Extention {extension} loaded!")
 
 
 def start_bot(token=None):

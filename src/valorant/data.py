@@ -127,7 +127,51 @@ RANK_VALUE = {
     }
 }
 
-
+# https://valorant.fandom.com/wiki/Competitive#Parties
+# ranks being able to play together
+# todo: add information in a way, we can automatically create rooms based on rank ranges
+# we could use the rank_tier range for that
+COMPETITIVE_RANK_GROUP = {
+    1:	{
+        "name": "Iron I - Silver III"
+    },
+    2:	{
+        "name": "Silver I - Gold III"
+    },
+    3:	{
+        "name": "Gold I - Platinum III"
+    },
+    4:	{
+        "name": "Platinum I - Diamond I"
+    },
+    5:	{
+        "name": "Platinum II - Diamond II"
+    },
+    6:	{
+        "name": "Platinum III - Diamond III"
+    },
+    7: {
+        "name": "Diamond I - Diamond I"
+    },
+    8: {
+        "name": "Diamond II - Diamond II"
+    },
+    9: {
+        "name": "Diamond III - Diamond III"
+    },
+    10: {
+        "name": "Diamond I - Immortal I"
+    },
+    11: {
+        "name": "Diamond II - Immortal II"
+    },
+    12:	{
+        "name": "Diamond III - Immortal III"
+    },
+    13: {
+        "name": "Immortal I - Radiant"
+    }
+}
 
 
 # Color Codes:

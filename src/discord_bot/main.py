@@ -59,19 +59,36 @@ async def on_ready():
 
         # create roles for all ranks
         for n in reversed(valorant.data.RANK_VALUE):
-            # set role_name for readability 
+            # set role_name for readability
             role_name = valorant.data.RANK_VALUE[n]["name"]
 
             # check if role exists - create it when not
             role = discord.utils.get(g.roles, name=role_name)
             if not role:
                 new_role = await g.create_role(name=role_name,
-                                               color=discord.Color.from_rgb(*valorant.data.RANK_VALUE[n]["color"]),
+                                               color=discord.Color.from_rgb(
+                                                   *valorant.data.RANK_VALUE[n]["color"]),
                                                mentionable=True, hoist=True)
-                logger.info(f"Role '{role_name}' has been created on {guild_string}")
+                logger.info(
+                    f"Role '{role_name}' has been created on {guild_string}")
 
-            else:
-                logger.info(f"Role '{role_name}' already exists on {guild_string}")
+        # current state:
+        # the following code would create rooms for all ranks
+        # rooms still need permissions fitting to the ranks!
+        # rooms should be created within a category
+
+        # # create channels for all ranks
+        # for group in valorant.data.COMPETITIVE_RANK_GROUP:
+        #     # set channel_name for readability
+        #     channel_name = valorant.data.COMPETITIVE_RANK_GROUP[group]["name"]
+        #     print(channel_name)
+
+        #     # check if channel exists - create it when not
+        #     channel = discord.utils.get(g.channels, name=channel_name)
+        #     if not channel:
+        #         new_channel = await g.create_text_channel(name=channel_name)
+        #         logger.info(
+        #             f"Channel '{channel_name}' has been created on {guild_string}")
 
     logger.info(f"Bot '{bot.user.name}' has connected, active on {len(bot.guilds)} guilds:\n{guild_string}")
 

@@ -56,9 +56,9 @@ async def on_ready():
     for g in bot.guilds:
         guild_string += f"{g.name} - {g.id} - Members: {g.member_count}\n"
         member_count += g.member_count
-        
+
         # create roles for all ranks
-        for n in valorant.data.RANK_VALUE:
+        for n in reversed(valorant.data.RANK_VALUE):
             # set role_name for readability 
             role_name = valorant.data.RANK_VALUE[n]["name"]
 

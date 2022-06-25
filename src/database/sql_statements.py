@@ -4,7 +4,7 @@ from sqlalchemy import update
 import database.sql_scheme as db
 
 
-def add_player(id, username, elo, rank, rank_tier, tagline, puuid, session=db.open_session()):
+def add_player(id, elo, rank, rank_tier, username, tagline, puuid, session=db.open_session()):
     """
     Add an entry to the players database
     """
@@ -16,7 +16,7 @@ def add_player(id, username, elo, rank, rank_tier, tagline, puuid, session=db.op
     session.commit()
 
 
-def update_player(id, elo, rank, rank_tier, tagline, username, session=db.open_session()):
+def update_player(id, elo, rank, rank_tier, username, tagline, puuid, session=db.open_session()):
     """
     Update the player in the database
     """
@@ -25,7 +25,8 @@ def update_player(id, elo, rank, rank_tier, tagline, username, session=db.open_s
         'rank': rank,
         'rank_tier': rank_tier,
         'tagline': tagline,
-        'username': username
+        'username': username,
+        'puuid': puuid
     })
     session.commit()
 
@@ -35,3 +36,9 @@ def get_player(id, session=db.open_session()):
     Get the player from the database
     """
     return session.query(db.Player).filter(db.Player.id == id).first()
+
+def player_exists(id, session=db.open_session()):
+    """
+    Check if the player exists in the database
+    """
+    return session.query(db.Player).filter(db.Player.id == id).first() is not None

@@ -79,7 +79,7 @@ class Help(commands.Cog):
             # setting information about author
             emb.add_field(name="About",
                           value=f"This bot is maintained by {owner}.\n\
-                                Please visit https://github.com/MayNiklas/discord-bot-valorant-rank to submit ideas or bugs.\n\
+                                Please visit https://github.com/MayNiklas/valorant-discord-bot to submit ideas or bugs.\n\
                                 Based on a template by nonchris: https://github.com/nonchris/discord-bot.\n")
             emb.set_footer(text=f"Bot is running Version: {VERSION}")
 

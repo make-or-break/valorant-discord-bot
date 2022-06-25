@@ -67,6 +67,7 @@ async def on_ready():
     # TODO: Register your extensions here
     initial_extensions = [
         '.cogs.onboarding',
+        #TODO: Add Crawler wich checks the tracked players for changes and updates the db + sends congrats on new ranks
         '.cogs.help'
     ]
 
@@ -74,6 +75,8 @@ async def on_ready():
         logger.info(f"Trying to load {extension} from {__package__}!")
         bot.load_extension(extension, package=__package__)
         logger.info(f"Extention {extension} loaded!")
+
+    #TODO: Create not existing roles from the valorant.RANK_VALUES
 
 
 def start_bot(token=None):

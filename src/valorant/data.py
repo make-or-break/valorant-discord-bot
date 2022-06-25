@@ -1,81 +1,81 @@
 # Valorant Rank information with rank_tier as key
 RANK_VALUE = {
-    3 : {
+    3: {
         "name": "Iron I",
         "elo": "0",
         "color": (148, 148, 148)
     },
-    4 : {
+    4: {
         "name": "Iron II",
         "elo": "100",
         "color": (148, 148, 148)
     },
-    5 : {
+    5: {
         "name": "Iron III",
         "elo": "200",
         "color": (148, 148, 148)
     },
-    6 : {
+    6: {
         "name": "Bronze I",
         "elo": "300",
         "color": (180, 150, 112)
     },
-    7 : {
+    7: {
         "name": "Bronze II",
         "elo": "400",
         "color": (180, 150, 112)
     },
-    8 : {
+    8: {
         "name": "Bronze III",
         "elo": "500",
         "color": (180, 150, 112)
     },
-    9 : {
+    9: {
         "name": "Silver I",
         "elo": "600",
         "color": (231, 235, 234)
     },
-    10 : {
+    10: {
         "name": "Silver II",
         "elo": "700",
         "color": (231, 235, 234)
     },
-    11 : {
+    11: {
         "name": "Silver III",
         "elo": "800",
         "color": (231, 235, 234)
     },
-    12 : {
+    12: {
         "name": "Gold I",
         "elo": "900",
         "color": (236, 192, 88)
     },
-    13 : {
+    13: {
         "name": "Gold II",
         "elo": "1000",
         "color": (236, 192, 88)
     },
-    14 : {
+    14: {
         "name": "Gold III",
         "elo": "1100",
         "color": (236, 192, 88)
     },
-    15 : {
+    15: {
         "name": "Platinum I",
         "elo": "1200",
         "color": (62, 176, 195)
     },
-    16 : {
+    16: {
         "name": "Platinum II",
         "elo": "1300",
         "color": (62, 176, 195)
     },
-    17 : {
+    17: {
         "name": "Platinum III",
         "elo": "1400",
         "color": (62, 176, 195)
     },
-    18 : {
+    18: {
         "name": "Diamond I",
         "elo": "1500",
         "color": (165, 109, 242)

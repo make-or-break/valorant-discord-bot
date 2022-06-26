@@ -11,6 +11,8 @@ import valorant
 from .log_setup import logger
 from .environment import PREFIX, TOKEN, ACTIVITY_NAME
 
+from .create import roles as create_roles
+
 """
 This bot is based on a template by nonchris
 https://github.com/nonchris/discord-bot
@@ -57,16 +59,9 @@ async def on_ready():
         guild_string += f"{g.name} - {g.id} - Members: {g.member_count}\n"
         member_count += g.member_count
 
-        # create roles for all ranks
-        for n in reversed(valorant.data.RANK_VALUE):
-            # set role_name for readability
-            role_name = valorant.data.RANK_VALUE[n]["name"]
-
-            # check if role exists - create it when not
-            role = discord.utils.get(g.roles, name=role_name)
-            if not role:
-                await g.create_role(name=role_name,color=discord.Color.from_rgb(*valorant.data.RANK_VALUE[n]["color"]), mentionable=True, hoist=True)
-                logger.info(f"Role '{role_name}' has been created on {guild_string}")
+        # call create.roles for every guild using this bot
+        # this function makes sure, a role for every rank exists
+        await create_roles(g)
 
         # current state:
         # the following code would create rooms for all ranks

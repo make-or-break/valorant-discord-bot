@@ -21,6 +21,8 @@ class Onboarding(commands.Cog):
     Onboarding flow and command to connect Valorant accounts with Discord users
     """
 
+    #TODO: Cancel Button in onboarding dialog, deactivate receiving commands while onboarding is active
+
     def __init__(self, bot):
         self.bot: commands.Bot = bot
 
@@ -136,6 +138,7 @@ class Onboarding(commands.Cog):
                     player = params[0].split('#')
                     await self.add_db_entry(user=ctx.message.author, player=player)
         else:
+            #TODO: abfrage: "do you want to change the account? - yes - no -"
             await ctx.send(
                 embed=ut.make_embed(
                     name='Info:',
@@ -158,7 +161,13 @@ class Onboarding(commands.Cog):
         if not db.player_exists(member.id):
             message = f'Welcome to the {member.guild.name} Server. Please send me your Valorant name and tagline in the following format: <name>#<tagline>';
             try:
-                await member.send(message)
+                await member.send(
+                    embed=ut.make_embed(
+                        name=f'Welcome {member.name}',
+                        value=message,
+                        color=ut.green
+                    )
+                )
             except Exception as ex:
                 logger.info(f'Something went wrong: {ex.message}')
                 return
@@ -183,13 +192,23 @@ class Onboarding(commands.Cog):
             player = response.content.split('#')
             await self.add_db_entry(user=member, player=player)
             role = await self.add_role(member=member, rank_tier=db.get_player(member.id).rank_tier)
-            await member.send(f'I gave you your matching role: {role.name}')
+            await member.send(
+                embed=ut.make_embed(
+                    name='Info',
+                    value=f'I gave you your matching role: {role.name}',
+                    color=ut.blue_light
+                )
+            )
         else:
             role = await self.add_role(member=member, rank_tier=db.get_player(member.id).rank_tier)
-            await member.send(f'Welcome to the {member.guild.name} Server. I gave you your matching role: {role.name}')
+            await member.send(
+                embed=ut.make_embed(
+                    name=f'Welcome {member.name}',
+                    value=f'Welcome to the {member.guild.name} Server. I gave you your matching role: {role.name}',
+                    color=ut.green
+                )
+            )
 
-
-    #TODO: Add event listener for command to start onboarding flow manually
 
 def setup(bot):
     bot.add_cog(Onboarding(bot))

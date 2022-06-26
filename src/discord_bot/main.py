@@ -65,12 +65,8 @@ async def on_ready():
             # check if role exists - create it when not
             role = discord.utils.get(g.roles, name=role_name)
             if not role:
-                new_role = await g.create_role(name=role_name,
-                                               color=discord.Color.from_rgb(
-                                                   *valorant.data.RANK_VALUE[n]["color"]),
-                                               mentionable=True, hoist=True)
-                logger.info(
-                    f"Role '{role_name}' has been created on {guild_string}")
+                await g.create_role(name=role_name,color=discord.Color.from_rgb(*valorant.data.RANK_VALUE[n]["color"]), mentionable=True, hoist=True)
+                logger.info(f"Role '{role_name}' has been created on {guild_string}")
 
         # current state:
         # the following code would create rooms for all ranks

@@ -5,13 +5,13 @@ import discord
 from discord.ext import commands
 
 import valorant
-
+from .create import roles as create_roles
+from .environment import ACTIVITY_NAME
+from .environment import PREFIX
+from .environment import TOKEN
+from .log_setup import logger
 # setup of logging and env-vars
 # logging must be initialized before environment, to enable logging in environment
-from .log_setup import logger
-from .environment import PREFIX, TOKEN, ACTIVITY_NAME
-
-from .create import roles as create_roles
 
 """
 This bot is based on a template by nonchris
@@ -54,9 +54,9 @@ async def on_ready():
 
     print()
     member_count = 0
-    guild_string = ""
+    guild_string = ''
     for g in bot.guilds:
-        guild_string += f"{g.name} - {g.id} - Members: {g.member_count}\n"
+        guild_string += f'{g.name} - {g.id} - Members: {g.member_count}\n'
         member_count += g.member_count
 
         # call create.roles for every guild using this bot
@@ -98,9 +98,9 @@ async def on_ready():
     ]
 
     for extension in initial_extensions:
-        logger.info(f"Trying to load {extension} from {__package__}!")
+        logger.info(f'Trying to load {extension} from {__package__}!')
         bot.load_extension(extension, package=__package__)
-        logger.info(f"Extention {extension} loaded!")
+        logger.info(f'Extention {extension} loaded!')
 
     #TODO: Create not existing roles from the valorant.RANK_VALUES
 
@@ -112,4 +112,4 @@ def start_bot(token=None):
     if TOKEN is not None:
         bot.run(TOKEN)
     else:
-        logger.error("No token was given! - Exiting")
+        logger.error('No token was given! - Exiting')

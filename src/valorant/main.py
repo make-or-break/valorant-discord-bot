@@ -1,5 +1,6 @@
-import requests
 import json
+
+import requests
 
 
 def get_player_json(Username, Tagline):
@@ -7,7 +8,7 @@ def get_player_json(Username, Tagline):
     Get the json data of a player.
     """
 
-    api_url = "https://api.henrikdev.xyz/valorant/v2/mmr/eu/"+Username+"/"+Tagline
+    api_url = 'https://api.henrikdev.xyz/valorant/v2/mmr/eu/'+Username+'/'+Tagline
 
     response = requests.get(api_url)
 
@@ -22,7 +23,7 @@ def get_player_json_by_puuid(puuid):
     Get the json data of a player by puuid.
     """
 
-    api_url = "https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/eu/"+puuid
+    api_url = 'https://api.henrikdev.xyz/valorant/v2/by-puuid/mmr/eu/'+puuid
     response = requests.get(api_url)
     data = response.json()
 
@@ -34,7 +35,7 @@ def get_elo(data):
     Get the elo of a player.
     """
 
-    return(data["data"]["current_data"]["elo"])
+    return(data['data']['current_data']['elo'])
 
 
 def get_rank(data):
@@ -42,7 +43,7 @@ def get_rank(data):
     Get the rank of a player.
     """
 
-    return (data["data"]["current_data"]["currenttierpatched"])
+    return (data['data']['current_data']['currenttierpatched'])
 
 
 def get_rank_tier(data):
@@ -50,7 +51,7 @@ def get_rank_tier(data):
     Get the rank tier of a player.
     """
 
-    return (data["data"]["current_data"]["currenttier"])
+    return (data['data']['current_data']['currenttier'])
 
 
 def get_puuid(data):
@@ -58,11 +59,11 @@ def get_puuid(data):
     Get the puuid of a player.
     """
 
-    return (data["data"]["puuid"])
+    return (data['data']['puuid'])
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     # libary is meant to be used as a module
     # so this is only used for testing
-    data = get_player_json("MayNiklas", "Niki")
+    data = get_player_json('MayNiklas', 'Niki')
     print(data)

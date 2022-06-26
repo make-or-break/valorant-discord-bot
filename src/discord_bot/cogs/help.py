@@ -1,17 +1,20 @@
 import discord
 from discord.ext import commands
 
+from ..environment import OWNER_ID
+from ..environment import OWNER_NAME
+from ..environment import PREFIX
+from ..environment import VERSION
 from ..utils import utils as utl
-from ..environment import OWNER_NAME, OWNER_ID, VERSION, PREFIX
 
 ### @package help
-# 
+#
 # This custom help command is a replacement for the default one on any Discord Bot written in discord.py!
 # However, you must put "bot.remove_command('help')" in your bot, and the command must be in a cog for it to work.
-# 
+#
 # Original concept by [Jared Newsom (AKA Jared M.F.)](https://gist.github.com/StudioMFTechnologies/ad41bfd32b2379ccffe90b0e34128b8b)
 # Rewritten and optimized by [nonchris](https://github.com/nonchris)
-# 
+#
 # This version relies more on the structure around this module than the gist does, which is more 'stand alone'
 
 
@@ -21,7 +24,7 @@ class Help(commands.Cog):
     """
 
     def __init__(self, bot):
-        """! 
+        """!
         Constructor
 
         @param bot The bot instance to be used.
@@ -33,7 +36,7 @@ class Help(commands.Cog):
     async def help(self, ctx, *params):
         """!
         Shows all modules of that bot
-        
+
         @param ctx Context of the message.
         @param params further arguments
         """
@@ -57,7 +60,7 @@ class Help(commands.Cog):
             cogs_desc = ''
             for cog in self.bot.cogs:
                 # ignoring boring cogs
-                if cog == "MessageListener" or cog == "Help":
+                if cog == 'MessageListener' or cog == 'Help':
                     continue
                 cogs_desc += f'`{cog}` {self.bot.cogs[cog].__doc__}\n'
 
@@ -77,11 +80,11 @@ class Help(commands.Cog):
                 emb.add_field(name='Not belonging to a module', value=commands_desc, inline=False)
 
             # setting information about author
-            emb.add_field(name="About",
-                          value=f"This bot is maintained by {owner}.\n\
+            emb.add_field(name='About',
+                          value=f'This bot is maintained by {owner}.\n\
                                 Please visit https://github.com/MayNiklas/valorant-discord-bot to submit ideas or bugs.\n\
-                                Based on a template by nonchris: https://github.com/nonchris/discord-bot.\n")
-            emb.set_footer(text=f"Bot is running Version: {VERSION}")
+                                Based on a template by nonchris: https://github.com/nonchris/discord-bot.\n')
+            emb.set_footer(text=f'Bot is running Version: {VERSION}')
 
         # block called when one cog-name is given
         # trying to find matching cog and it's commands
@@ -100,7 +103,7 @@ class Help(commands.Cog):
                     for command in self.bot.get_cog(cog).get_commands():
                         # if cog is not hidden
                         if not command.hidden:
-                            emb.add_field(name=f"{PREFIX}{command.name}", value=command.help, inline=False)
+                            emb.add_field(name=f'{PREFIX}{command.name}', value=command.help, inline=False)
                     # found cog - breaking loop
                     break
 
@@ -114,15 +117,15 @@ class Help(commands.Cog):
         # too many cogs requested - only one at a time allowed
         elif len(params) > 1:
             emb = discord.Embed(title="That's too much.",
-                                description="Please request only one module at once :sweat_smile:",
+                                description='Please request only one module at once :sweat_smile:',
                                 color=utl.orange)
 
         else:
             emb = discord.Embed(title="It's a magical place.",
                                 description="I don't know how you got here. But I didn't see this coming at all.\n"
-                                            "Would you please be so kind to report that issue to me on github?\n"
-                                            "https://github.com/MayNiklas/discord-bot-valorant-rank/issues\n"
-                                            "Thank you!",
+                                            'Would you please be so kind to report that issue to me on github?\n'
+                                            'https://github.com/MayNiklas/discord-bot-valorant-rank/issues\n'
+                                            'Thank you!',
                                 color=utl.orange)
 
         # sending reply embed using our own function defined above

@@ -1,12 +1,15 @@
 import os
 import sys
-import sqlalchemy
 
-from sqlalchemy.orm import declarative_base
+import sqlalchemy
+from sqlalchemy import Column
 from sqlalchemy import create_engine
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy import event
+from sqlalchemy import Integer
+from sqlalchemy import String
+from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import scoped_session
+from sqlalchemy.orm import sessionmaker
 
 if not os.path.exists('data/'):
     os.mkdir('data/')
@@ -44,5 +47,5 @@ try:
         return sessionmaker(bind=engine)()
 
 except:
-    print("An exception while connecting to the DB has occurred")
+    print('An exception while connecting to the DB has occurred')
     sys.exit()

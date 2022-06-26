@@ -1,12 +1,13 @@
 import json
 import os
-from .log_setup import logger
+from typing import Dict
+from typing import Optional
 
+from .log_setup import logger
 ### @package environment
 #
 # Interactions with the environment variables.
 #
-from typing import Dict, Optional
 
 
 def load_env(key: str, default: str, config_dict=None) -> str:
@@ -44,10 +45,10 @@ def load_env(key: str, default: str, config_dict=None) -> str:
 
     # catch token and prefix value, since it doesn't need the extra replace handling below
     # also PREFIX isn't defined yet...
-    if key == "TOKEN":
+    if key == 'TOKEN':
         return value
 
-    if key == "PREFIX":
+    if key == 'PREFIX':
         if value:
             return value
         else:
@@ -56,7 +57,7 @@ def load_env(key: str, default: str, config_dict=None) -> str:
 
     if value is not None:
         try:
-            return value.replace("{PREFIX}", PREFIX)
+            return value.replace('{PREFIX}', PREFIX)
         # this happens when a variable is loaded before PREFIX
         except NameError as e:
             logger.error(
@@ -73,7 +74,7 @@ def load_conf_file(config_file='./data/config.json') -> Optional[Dict[str, str]]
     if os.path.isfile(config_file):
         logger.debug(f"Config file '{config_file}' exists, trying to read")
         try:
-            with open(config_file, "r") as jsonfile:
+            with open(config_file, 'r') as jsonfile:
                 return json.load(jsonfile)
 
         except OSError:
@@ -85,12 +86,11 @@ def load_conf_file(config_file='./data/config.json') -> Optional[Dict[str, str]]
 
 cfg_dict = load_conf_file('./data/config.json')
 
-TOKEN = load_env("TOKEN", '', config_dict=cfg_dict)  # reading in the token from environment - there is no default...
+TOKEN = load_env('TOKEN', '', config_dict=cfg_dict)  # reading in the token from environment - there is no default...
 
 # loading optional env variables
-PREFIX = load_env("PREFIX", "b!", config_dict=cfg_dict)
-VERSION = load_env("VERSION", "unknown", config_dict=cfg_dict)  # version of the bot
-OWNER_NAME = load_env("OWNER_NAME", "unknown", config_dict=cfg_dict)   # owner name with tag e.g. pi#3141
-OWNER_ID = int(load_env("OWNER_ID", "100000000000000000", config_dict=cfg_dict))  # discord id of the owner
-ACTIVITY_NAME = load_env("ACTIVITY_NAME", f"{PREFIX}help", config_dict=cfg_dict)  # activity bot plays
-
+PREFIX = load_env('PREFIX', 'b!', config_dict=cfg_dict)
+VERSION = load_env('VERSION', 'unknown', config_dict=cfg_dict)  # version of the bot
+OWNER_NAME = load_env('OWNER_NAME', 'unknown', config_dict=cfg_dict)   # owner name with tag e.g. pi#3141
+OWNER_ID = int(load_env('OWNER_ID', '100000000000000000', config_dict=cfg_dict))  # discord id of the owner
+ACTIVITY_NAME = load_env('ACTIVITY_NAME', f'{PREFIX}help', config_dict=cfg_dict)  # activity bot plays

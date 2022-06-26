@@ -23,7 +23,7 @@ class Crawler(commands.Cog):
     # It can be started using self.my_task.start() e.g. from this cogs __init__
     @tasks.loop(seconds=60)
     async def crawler_task(self):
-        print("Crawling tracked Players")
+        print('Crawling tracked Players')
 
 def setup(bot):
     bot.add_cog(Crawler(bot))

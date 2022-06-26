@@ -42,10 +42,10 @@ async def send_embed(ctx, embed):
         except Forbidden:
             await ctx.author.send(
                 f"Hey, seems like I can't send any message in {ctx.channel.name} on {ctx.guild.name}\n"
-                f"May you inform the server team about this issue? :slight_smile:", embed=embed)
+                f'May you inform the server team about this issue? :slight_smile:', embed=embed)
 
 
-def make_embed(title="", color=blue_light, name="‌", value="‌", footer=None) -> discord.Embed:
+def make_embed(title='', color=blue_light, name='‌', value='‌', footer=None) -> discord.Embed:
     """!
     Function to generate generate an embed in one function call
     please note that name and value can't be empty - name and value contain a zero width non-joiner

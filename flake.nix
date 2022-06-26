@@ -2,7 +2,7 @@
   description = "valorant discord bot";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-21.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -98,34 +98,47 @@
         # Use nixpkgs-fmt for `nix fmt'
         formatter = pkgs.nixpkgs-fmt;
 
-        devShells = flake-utils.lib.flattenTree {
-          # nix develop .#
-          default =
-            let
-              python38-with-dependencies = pkgs.python38.withPackages (p: with p; [
-                discordpy
-                requests
-                sqlalchemy
-              ]);
-            in
-            python38-with-dependencies.env;
-        };
-
-
         defaultPackage = packages.valorant-discord-bot;
         packages = flake-utils.lib.flattenTree rec {
 
-          valorant-discord-bot = with pkgs.python38Packages;
-            pkgs.python38Packages.buildPythonPackage rec {
+          valorant-discord-bot = with pkgs.python310Packages;
+            buildPythonPackage rec {
               pname = "valorant-discord-bot";
               version = "0.1";
 
               src = self;
-              # 403 Forbidden when using requests 2.27.0
-              # -> had to use nixos-21.11 as flake input!
-              propagatedBuildInputs = [ discordpy requests sqlalchemy ];
-              doCheck = false;
+              propagatedBuildInputs =
+                let
+                  # we want to use discordpy 2.0.0, but it's not available in nixpkgs yet (it's still in beta)
+                  discordpy_2 = (discordpy.overrideAttrs
+                    (old: rec {
+                      pname = "discord.py";
+                      version = "2.0.0a4370+g868476c9";
+                      src = pkgs.fetchFromGitHub {
+                        owner = "Rapptz";
+                        repo = pname;
+                        rev = "903e2e64e9182b8d3330ef565af7bb46ff9f04da";
+                        sha256 = "sha256-u17sG3mjJf19euZ0CHvJwnvhb16F3WyAQt/w+RZFu1Y=";
+                      };
+                    }));
+                  # requests 2.27.0 is terribly broken, so we use 2.18.0 instead
+                  requests_2_28_0 = (requests.overrideAttrs
+                    (old: rec{
+                      pname = "requests";
+                      version = "2.28.0";
+                      src = fetchPypi {
+                        inherit pname version;
+                        hash = "sha256-1WhyOn69JYddjR6vXfoGjNL8gZSy5IPXsffIGRjb7Gs=";
+                      };
+                    }));
+                in
+                [
+                  discordpy_2
+                  requests_2_28_0
+                  sqlalchemy
+                ];
 
+              doCheck = false;
               pythonImportsCheck = [
                 "database.sql_scheme"
                 "database.sql_statements"
@@ -136,7 +149,7 @@
               # removes install_requires from the setup.py
               # version numbers of discord.py are still broken
               preBuild = ''
-                sed -i '8d' setup.py
+                sed -i '10d' setup.py
               '';
 
               meta = with pkgs.lib; {

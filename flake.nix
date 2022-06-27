@@ -104,39 +104,42 @@
           valorant-discord-bot = with pkgs.python310Packages;
             buildPythonPackage rec {
               pname = "valorant-discord-bot";
-              version = "0.1";
+              version = "0.2.0";
 
               src = self;
-              propagatedBuildInputs =
-                let
-                  # we want to use discordpy 2.0.0, but it's not available in nixpkgs yet (it's still in beta)
-                  discordpy_2 = (discordpy.overrideAttrs
-                    (old: rec {
-                      pname = "discord.py";
-                      version = "2.0.0a4370+g868476c9";
-                      src = pkgs.fetchFromGitHub {
-                        owner = "Rapptz";
-                        repo = pname;
-                        rev = "903e2e64e9182b8d3330ef565af7bb46ff9f04da";
-                        sha256 = "sha256-u17sG3mjJf19euZ0CHvJwnvhb16F3WyAQt/w+RZFu1Y=";
-                      };
-                    }));
-                  # requests 2.27.0 is terribly broken, so we use 2.18.0 instead
-                  requests_2_28_0 = (requests.overrideAttrs
-                    (old: rec{
-                      pname = "requests";
-                      version = "2.28.0";
-                      src = fetchPypi {
-                        inherit pname version;
-                        hash = "sha256-1WhyOn69JYddjR6vXfoGjNL8gZSy5IPXsffIGRjb7Gs=";
-                      };
-                    }));
-                in
-                [
-                  discordpy_2
-                  requests_2_28_0
-                  sqlalchemy
-                ];
+              propagatedBuildInputs = [
+
+                # we want to use discordpy 2.0.0a
+                # but it's not available in nixpkgs yet (it's still in alpha)
+                # discord.py uses a newer API version with new features
+                # the older API version will stop working in the future
+                (discordpy.overrideAttrs
+                  (old: rec {
+                    pname = "discord.py";
+                    version = "2.0.0a";
+                    src = pkgs.fetchFromGitHub {
+                      owner = "Rapptz";
+                      repo = pname;
+                      rev = "55849d996e65613a334d73adbfc43bbe7b77d31a";
+                      sha256 = "sha256-7s+wIIaih0CtXCzD4nAfSxvebZuEbYIo5LMH6RZgX9A=";
+                    };
+                  }))
+
+                # use requests 2.28.0, since version 2.27.2 is terrible broken
+                (requests.overrideAttrs
+                  (old: rec {
+                    pname = "requests";
+                    version = "2.28.0";
+                    src = fetchPypi {
+                      inherit pname version;
+                      hash = "sha256-1WhyOn69JYddjR6vXfoGjNL8gZSy5IPXsffIGRjb7Gs=";
+                    };
+                  }))
+
+                # we don't have to modify sqlalchemy, since it's developers still have some sanity in mind
+                sqlalchemy
+
+              ];
 
               doCheck = false;
               pythonImportsCheck = [
@@ -145,12 +148,6 @@
 
                 "valorant"
               ];
-
-              # removes install_requires from the setup.py
-              # version numbers of discord.py are still broken
-              preBuild = ''
-                sed -i '10d' setup.py
-              '';
 
               meta = with pkgs.lib; {
                 description = "valorant discord bot";

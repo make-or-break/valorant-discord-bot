@@ -99,17 +99,35 @@ async def on_ready():
 
     for extension in initial_extensions:
         logger.info(f'Trying to load {extension} from {__package__}!')
-        bot.load_extension(extension, package=__package__)
+        await bot.load_extension(extension, package=__package__)
         logger.info(f'Extention {extension} loaded!')
 
-    #TODO: Create not existing roles from the valorant.RANK_VALUES
+
+# new way for loading extentions
+# async def load_extensions():
+#     for filename in os.listdir("./cogs"):
+#         if filename.endswith(".py"):
+#             # cut off the .py from the file name
+#             await bot.load_extension(f"cogs.{filename[:-3]}")
+
+# New way of starting
+async def main(token=None):
+    async with bot:
+        """ Start the bot, takes token, uses token from env if none is given """
+        if token is not None:
+            await bot.start(token)
+        if TOKEN is not None:
+            await bot.start(TOKEN)
+        else:
+            logger.error('No token was given! - Exiting')
 
 
-def start_bot(token=None):
-    """ Start the bot, takes token, uses token from env if none is given """
-    if token is not None:
-        bot.run(token)
-    if TOKEN is not None:
-        bot.run(TOKEN)
-    else:
-        logger.error('No token was given! - Exiting')
+# old way of starting
+# def start_bot(token=None):
+#     """ Start the bot, takes token, uses token from env if none is given """
+#     if token is not None:
+#         bot.run(token)
+#     if TOKEN is not None:
+#         bot.run(TOKEN)
+#     else:
+#         logger.error('No token was given! - Exiting')

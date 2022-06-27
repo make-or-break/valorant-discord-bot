@@ -25,5 +25,5 @@ class Crawler(commands.Cog):
     async def crawler_task(self):
         print('Crawling tracked Players')
 
-def setup(bot):
-    bot.add_cog(Crawler(bot))
+async def setup(bot):
+    await bot.add_cog(Crawler(bot))

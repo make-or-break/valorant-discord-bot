@@ -11,7 +11,7 @@ long_description = (here / 'README.md').read_text(encoding='utf-8')
 
 setup(
     name='valorant-discord-bot',
-    version='0.1',
+    version='0.2.0',
     description='A discord bot for valorant communities',
     long_description=long_description,
     long_description_content_type='text/markdown',

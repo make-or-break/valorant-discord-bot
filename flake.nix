@@ -149,12 +149,6 @@
                 "valorant"
               ];
 
-              # removes install_requires from the setup.py
-              # version numbers of discord.py are still broken
-              preBuild = ''
-                sed -i '10d' setup.py
-              '';
-
               meta = with pkgs.lib; {
                 description = "valorant discord bot";
                 homepage = "https://github.com/MayNiklas/discord-bot-valorant-rank/";

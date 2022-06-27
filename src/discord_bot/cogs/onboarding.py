@@ -61,7 +61,7 @@ class Onboarding(commands.Cog):
         if not ctx.channel.type == discord.ChannelType.private:
             await ctx.send(
                 embed=ut.make_embed(
-                    name='Error',
+                    name='Error:',
                     value='This command is only available in private chat. Please send me a DM :)',
                     color=ut.red
                 )
@@ -97,7 +97,7 @@ class Onboarding(commands.Cog):
                     else:
                         await ctx.send(
                             embed=ut.make_embed(
-                                name='Error',
+                                name='Error:',
                                 value='Please send a valid name and tagline in the following format: <name>#<tagline>',
                                 color=ut.red
                             )
@@ -126,7 +126,7 @@ class Onboarding(commands.Cog):
                         else:
                             await ctx.send(
                                 embed=ut.make_embed(
-                                    name='Error',
+                                    name='Error:',
                                     value='Please send a valid name and tagline in the following format: <name>#<tagline>',
                                     color=ut.red
                                 )
@@ -184,7 +184,7 @@ class Onboarding(commands.Cog):
                 else:
                     await member.send(
                         embed=ut.make_embed(
-                            name='Error',
+                            name='Error:',
                             value='Please send a valid name and tagline in the following format: <name>#<tagline>',
                             color=ut.red
                         )

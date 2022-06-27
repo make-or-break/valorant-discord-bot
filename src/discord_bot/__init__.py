@@ -1,12 +1,12 @@
 import valorant
+import asyncio
 from .cogs import onboarding
-#from .main import start_bot
-from .main import main
+from .main import start_bot
 from .utils import utils
 
 
 def main():
-    start_bot()
+    asyncio.run(start_bot())
 
 
 if __name__ == '__main__':

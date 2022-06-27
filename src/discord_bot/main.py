@@ -63,24 +63,6 @@ async def on_ready():
         # this function makes sure, a role for every rank exists
         await create_roles(g)
 
-        # current state:
-        # the following code would create rooms for all ranks
-        # rooms still need permissions fitting to the ranks!
-        # rooms should be created within a category
-
-        # # create channels for all ranks
-        # for group in valorant.data.COMPETITIVE_RANK_GROUP:
-        #     # set channel_name for readability
-        #     channel_name = valorant.data.COMPETITIVE_RANK_GROUP[group]["name"]
-        #     print(channel_name)
-
-        #     # check if channel exists - create it when not
-        #     channel = discord.utils.get(g.channels, name=channel_name)
-        #     if not channel:
-        #         new_channel = await g.create_text_channel(name=channel_name)
-        #         logger.info(
-        #             f"Channel '{channel_name}' has been created on {guild_string}")
-
     logger.info(f"Bot '{bot.user.name}' has connected, active on {len(bot.guilds)} guilds:\n{guild_string}")
 
     await bot.change_presence(

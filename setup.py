@@ -43,7 +43,7 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
 
         'Typing :: Typed',
-        ],
+            ],
 
     install_requires=[
         'requests == 2.28.0',
@@ -51,14 +51,12 @@ setup(
         # installing discord.py 2.0.0a via pip is not supported yet
         # using a git repository here would breake the flake as flakes are pure by definition
         # "discord.py @ git+https://github.com/Rapptz/discord.py#1335937"
-        ],
+            ],
 
     package_dir={'': 'src/'},
     packages=find_packages(where='src/'),
 
     entry_points={
-        'console_scripts': [
-            'valorant-discord-bot=discord_bot:start_bot',
-        ]
-        }
+        'console_scripts': ['valorant-discord-bot=discord_bot:main']
+            }
 )

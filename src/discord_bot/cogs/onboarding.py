@@ -1,14 +1,47 @@
+import asyncio
+import gc
 import imp
 import re
+from ast import AsyncFunctionDef
+from cgitb import lookup
+from cmath import log
+from email import message
+from pyclbr import Function
 
 import discord
 from discord.ext import commands
 from discord.ext import tasks
+from sqlalchemy import func
 
 import valorant
 from ..log_setup import logger
 from ..utils import utils as ut
 from database import sql_statements as db
+
+
+# Button View for canceling the current dialog
+class CancelView(discord.ui.View):
+
+    def __init__(self, *, timeout=None, target=None, message_list=[]):
+        super().__init__(timeout=timeout)
+        self.target=target
+        self.message_list=message_list
+
+    @discord.ui.button(label='Cancel', style=discord.ButtonStyle.red)
+    async def cancel_button(self, interaction:discord.Interaction, button:discord.ui.Button):
+        if (not self.target.cancelled()) and (not self.target.done()):
+            logger.info(f'Target to cancel: {self.target}')
+            self.target.cancel()
+            logger.info(f'Cancelled: {self.target}')
+
+        # Disable clicked button
+        button.disabled=True
+        button.label='Cancelled!'
+        await interaction.response.edit_message(view=self)
+
+        # Disable all other buttons connected to the same dialog
+        for message in self.message_list:
+            await message.edit(view=self)
 
 
 ### @package onboarding
@@ -21,7 +54,7 @@ class Onboarding(commands.Cog):
     Onboarding flow and command to connect Valorant accounts with Discord users
     """
 
-    #TODO: Cancel Button in onboarding dialog, deactivate receiving commands while onboarding is active
+    #TODO: deactivate receiving commands while onboarding is active
 
     def __init__(self, bot):
         self.bot: commands.Bot = bot
@@ -48,7 +81,7 @@ class Onboarding(commands.Cog):
         return role
 
 
-    #TODO: Buttons: Cancel beim Namen abfragen, Überprüfung mit "Ist das wirklich dein Account - Ja - Nein -"
+    #TODO: Überprüfung mit "Ist das wirklich dein Account - Ja - Nein - nach connecten"
     @commands.command(name='connect', help='Connect your Valorant account to your Discord account')
     async def connect(self, ctx, *params):
         """!
@@ -56,6 +89,8 @@ class Onboarding(commands.Cog):
         @param ctx Context of the message
         @param params further arguments
         """
+
+        message_list = []
 
         # Send Error and break if command is not executed in private chat
         if not ctx.channel.type == discord.ChannelType.private:
@@ -70,17 +105,21 @@ class Onboarding(commands.Cog):
 
         # If player already exists in db add role on all his guilds managed by this bot, otherwise start the onboarding first
         if not db.player_exists(ctx.author.id):
-            # Ask for Valorant name if not given in params
+            # Valorant name not in params -> Ask for name
             if not params:
-                message = 'Please send me your Valorant name and tagline in the following format: <name>#<tagline>, to connect your Valorant account.';
                 try:
-                    await ctx.send(
-                            embed=ut.make_embed(
-                                name='Connect your Account',
-                                value=message,
-                                color=ut.blue_light
-                            )
-                        )
+
+                    message = await ctx.send(
+                        embed=ut.make_embed(
+                            name='Connect your Account',
+                            value='Please send me your Valorant name and tagline in the following format: <name>#<tagline>, to connect your Valorant account.',
+                            color=ut.blue_light
+                        ),
+                        view = CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
+                    )
+                    message_list.append(message)
+                    logger.info(f'ID AFTER: {id(message_list)}')
+
                 except Exception as ex:
                     logger.info(f'Something went wrong: {ex.message}')
                     return
@@ -95,26 +134,31 @@ class Onboarding(commands.Cog):
                     if (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), response.content)):
                         valid = True
                     else:
-                        await ctx.send(
+                        message = await ctx.send(
                             embed=ut.make_embed(
                                 name='Error:',
                                 value='Please send a valid name and tagline in the following format: <name>#<tagline>',
                                 color=ut.red
-                            )
+                            ),
+                            view = CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
                         )
+                        message_list.append(message)
 
                 player = response.content.split('#')
                 await self.add_db_entry(user=ctx.message.author, player=player)
 
+            # Valorant name in params
             else:
                 if not (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), params[0])):
-                    await ctx.send(
+                    message = await ctx.send(
                         embed=ut.make_embed(
                             name='Error: Thats not a valid name and tagline.',
                             value='Please resend a valid name and tagline in the following format: <name>#<tagline> in a message.',
                             color=ut.red
-                        )
+                        ),
+                        view = CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
                     )
+                    message_list.append(message)
 
                     def check_response(res):
                         return res.channel.type == discord.ChannelType.private and res.author == ctx.message.author
@@ -124,19 +168,23 @@ class Onboarding(commands.Cog):
                         if (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), response.content)):
                             valid = True
                         else:
-                            await ctx.send(
+                            message = await ctx.send(
                                 embed=ut.make_embed(
                                     name='Error:',
                                     value='Please send a valid name and tagline in the following format: <name>#<tagline>',
                                     color=ut.red
-                                )
+                                ),
+                                view = CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
                             )
+                            message_list.append(message)
 
                     player = response.content.split('#')
                     await self.add_db_entry(user=ctx.message.author, player=player)
                 else:
                     player = params[0].split('#')
                     await self.add_db_entry(user=ctx.message.author, player=player)
+
+        # Player already in db
         else:
             #TODO: abfrage: "do you want to change the account? - yes - no -"
             await ctx.send(
@@ -157,17 +205,22 @@ class Onboarding(commands.Cog):
     # Event listener, wich does an onboarding flow if a new user is joining.
     @commands.Cog.listener()
     async def on_member_join(self, member):
+
+        message_list = []
+
         # if player is already in the db (onbording done on other guild) just add the role, otherwise start the onboarding
         if not db.player_exists(member.id):
-            message = f'Welcome to the {member.guild.name} Server. Please send me your Valorant name and tagline in the following format: <name>#<tagline>';
             try:
-                await member.send(
+                message = await member.send(
                     embed=ut.make_embed(
                         name=f'Welcome {member.name}',
-                        value=message,
+                        value=f'Welcome to the {member.guild.name} Server. Please send me your Valorant name and tagline in the following format: <name>#<tagline>',
                         color=ut.green
-                    )
+                    ),
+                    view=CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
                 )
+                message_list.append(message)
+
             except Exception as ex:
                 logger.info(f'Something went wrong: {ex.message}')
                 return
@@ -182,13 +235,16 @@ class Onboarding(commands.Cog):
                 if (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), response.content)):
                     valid = True
                 else:
-                    await member.send(
+                    message = await member.send(
                         embed=ut.make_embed(
                             name='Error:',
                             value='Please send a valid name and tagline in the following format: <name>#<tagline>',
                             color=ut.red
-                        )
-                    )
+                        ),
+                    view=CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
+                )
+                message_list.append(message)
+
             player = response.content.split('#')
             await self.add_db_entry(user=member, player=player)
             role = await self.add_role(member=member, rank_tier=db.get_player(member.id).rank_tier)

@@ -84,6 +84,7 @@ async def on_ready():
         await bot.load_extension(extension, package=__package__)
         logger.info(f'Extention {extension} loaded!')
 
+
 async def start_bot(token=None):
     async with bot:
         """ Start the bot, takes token, uses token from env if none is given """

@@ -95,12 +95,49 @@ def get_matchid(data):
     return (data['data'][0]['metadata']['matchid'])
 
 
+def get_match_ids(data):
+    """
+    Get the matchids of the last 5 matches.
+    """
+
+    ids = []
+    for i in data['data']:
+        ids.append(i['metadata']['matchid'])
+    return ids
+
+
+###############################################################################
+# code related to getting match stats
+
+def get_match_json(matchid):
+    """
+    Get the match stats of a match.
+    """
+
+    api_url = 'https://api.henrikdev.xyz/valorant/v2/match/' + matchid
+
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        return(response.json())
+    else:
+        return(None)
+
+
+def get_match_metadata(data):
+    """
+    Get the metadata of a match
+    """
+
+    return (data['data']['metadata'])
+
+
 def get_game_start(data):
     """
     Get the time of the start of the last match.
     """
 
-    return (data['data'][0]['metadata']['game_start'])
+    return (data['data']['metadata']['game_start'])
 
 
 def get_game_length(data):
@@ -108,7 +145,7 @@ def get_game_length(data):
     Get the length of the last match (in milliseconds).
     """
 
-    return (data['data'][0]['metadata']['game_length'])
+    return (data['data']['metadata']['game_length'])
 
 
 def get_rounds_played(data):
@@ -116,7 +153,7 @@ def get_rounds_played(data):
     Get the length of the last match (in rounds).
     """
 
-    return (data['data'][0]['metadata']['rounds_played'])
+    return (data['data']['metadata']['rounds_played'])
 
 
 def get_map(data):
@@ -124,7 +161,9 @@ def get_map(data):
     Get the map of the last match.
     """
 
-    return (data['data'][0]['metadata']['map'])
+    return (data['data']['metadata']['map'])
+
+###############################################################################
 
 
 if __name__ == '__main__':

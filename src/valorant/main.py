@@ -1,3 +1,4 @@
+import datetime
 import json
 
 import requests
@@ -6,8 +7,20 @@ import requests
 # https://docs.henrikdev.xyz/valorant.html
 
 
+def milliseconds_to_time(milliseconds):
+    """
+    Convert milliseconds to time.
+    """
+
+    seconds = milliseconds // 1000
+    minutes = seconds // 60
+    seconds = seconds % 60
+    return '%d:%02d' % (minutes, seconds)
+
+
 ###############################################################################
 # code related to getting player stats
+
 
 def get_player_json(Username, Tagline):
     """
@@ -169,5 +182,14 @@ def get_map(data):
 if __name__ == '__main__':
     # libary is meant to be used as a module
     # so this is only used for testing
-    data = get_player_json('MayNiklas', 'Niki')
-    print(data)
+    matches = get_matches_json('MayNiklas', 'Niki')
+
+    for match in get_match_ids(matches):
+        data = get_match_json(match)
+
+        print(f'''
+        Match started: {datetime.datetime.utcfromtimestamp(get_game_start(data))}
+        Match length: {milliseconds_to_time(get_game_length(data))}
+        Rounds played: {get_rounds_played(data)}
+        Map: {get_map(data)}
+        ''')

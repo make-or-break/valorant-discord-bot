@@ -2,6 +2,12 @@ import json
 
 import requests
 
+# API documentation:
+# https://docs.henrikdev.xyz/valorant.html
+
+
+###############################################################################
+# code related to getting player stats
 
 def get_player_json(Username, Tagline):
     """

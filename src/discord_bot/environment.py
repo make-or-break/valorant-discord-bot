@@ -89,7 +89,7 @@ cfg_dict = load_conf_file('./data/config.json')
 TOKEN = load_env('TOKEN', '', config_dict=cfg_dict)  # reading in the token from environment - there is no default...
 
 # loading optional env variables
-PREFIX = load_env('PREFIX', 'b!', config_dict=cfg_dict)
+PREFIX = load_env('PREFIX', '!', config_dict=cfg_dict)
 VERSION = load_env('VERSION', 'unknown', config_dict=cfg_dict)  # version of the bot
 OWNER_NAME = load_env('OWNER_NAME', 'unknown', config_dict=cfg_dict)   # owner name with tag e.g. pi#3141
 OWNER_ID = int(load_env('OWNER_ID', '100000000000000000', config_dict=cfg_dict))  # discord id of the owner

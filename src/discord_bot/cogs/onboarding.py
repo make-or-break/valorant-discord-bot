@@ -10,6 +10,8 @@ from ..utils import utils as ut
 from database import sql_statements as db
 
 
+#TODO: Bei Rollen Vergabe, alte Rolle wegnehmen
+
 # Button View for canceling the current dialog
 class CancelView(discord.ui.View):
 
@@ -21,7 +23,6 @@ class CancelView(discord.ui.View):
     @discord.ui.button(label='Cancel', style=discord.ButtonStyle.red)
     async def cancel_button(self, interaction:discord.Interaction, button:discord.ui.Button):
         if (not self.target.cancelled()) and (not self.target.done()):
-            logger.info(f'Target to cancel: {self.target}')
             self.target.cancel()
             logger.info(f'Cancelled: {self.target}')
 
@@ -35,6 +36,76 @@ class CancelView(discord.ui.View):
             await message.edit(view=self)
 
 
+# Button View for changing account in db
+class ChangeAccountView(discord.ui.View):
+
+    def __init__(self, *, timeout=None, user, bot, message_list=[]):
+        super().__init__(timeout=timeout)
+        self.user=user
+        self.bot=bot
+        self.message_list=message_list
+
+
+    #TODO: ask for name + validation and db update and roll remove / update
+    @discord.ui.button(label='Yes', style=discord.ButtonStyle.green)
+    async def yes_button(self, interaction:discord.Interaction, child:discord.ui.Button):
+        # Disable buttons
+        for child in self.children:
+            child.disabled=True
+        await interaction.response.edit_message(view=self)
+
+        try:
+            message = await self.user.send(
+                embed=ut.make_embed(
+                    name='Change your Account',
+                    value='Please send me your new Valorant name and tagline in the following format: <name>#<tagline>, to change your Valorant account.',
+                    color=ut.blue_light
+                ),
+                view = CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=self.message_list)
+            )
+            self.message_list.append(message)
+
+        except Exception as ex:
+            logger.info(f'Something went wrong: {ex.message}')
+            return
+
+        logger.info(f'Change account DM sent to {self.user.name}, waiting for response.')
+        response = await validate_name(self, user=self.user, message_list=self.message_list)
+        player = response.content.split('#')
+        player_json = valorant.get_player_json(player[0], player[1])
+
+        rank_tier_before = db.get_player(id=self.user.id).rank_tier
+        rank_tier_new = valorant.get_rank_tier(player_json)
+        db.update_player(id=self.user.id, elo=valorant.get_elo(player_json), rank=valorant.RANK_VALUE[valorant.get_rank_tier(player_json)]['name'], rank_tier=rank_tier_new, username=player[0], tagline=player[1], puuid=valorant.get_puuid(player_json))
+
+        for g in self.bot.guilds:
+            for m in g.members:
+                if m == self.user:
+                    new_role = discord.utils.get(m.guild.roles, name=valorant.RANK_VALUE[rank_tier_new]['name'])
+                    old_role = discord.utils.get(m.guild.roles, name=valorant.RANK_VALUE[rank_tier_before]['name'])
+                    if not new_role:
+                        new_role = await m.guild.create_role(name=valorant.RANK_VALUE[rank_tier_new]['name'], color=discord.Color.from_rgb(*valorant.RANK_VALUE[rank_tier_new]['color']), mentionable = True, hoist = True, reason = 'User joint the Server and did the onboarding flow')
+
+                    # add the role to the user
+                    if new_role not in m.roles:
+                        #TODO: Remove old role
+                        await m.remove_roles(old_role)
+                        logger.info(f'Removed role {old_role.name} from user {m.name}!')
+                        await m.add_roles(new_role)
+                        logger.info(f'Added role {new_role.name} to user {m.name}!')
+                    else:
+                        logger.info(f'Member {m.name} already has role {new_role.name}!')
+
+
+    @discord.ui.button(label='No', style=discord.ButtonStyle.red)
+    async def no_button(self, interaction:discord.Interaction, child:discord.ui.Button):
+        # Disable buttons
+        for child in self.children:
+            child.disabled=True
+        await interaction.response.edit_message(view=self)
+
+
+
 ### @package onboarding
 #
 # Onboarding flow to connect Valorant accounts with Discord users
@@ -42,7 +113,7 @@ class CancelView(discord.ui.View):
 
 class Onboarding(commands.Cog):
     """
-    Onboarding flow and command to connect Valorant accounts with Discord users
+    Onboarding flow and command to connect Valorant accounts with Discord users.
     """
 
     #TODO: deactivate receiving commands while onboarding is active
@@ -76,7 +147,8 @@ class Onboarding(commands.Cog):
     @commands.command(name='connect', help='Connect your Valorant account to your Discord account')
     async def connect(self, ctx, *params):
         """!
-        Connect your Valorant Account to your Discord account
+        Connect your Valorant Account to your Discord account.
+        If you are already connected you can use this command to change the connected account.
         @param ctx Context of the message
         @param params further arguments
         """
@@ -109,7 +181,6 @@ class Onboarding(commands.Cog):
                         view = CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
                     )
                     message_list.append(message)
-                    logger.info(f'ID AFTER: {id(message_list)}')
 
                 except Exception as ex:
                     logger.info(f'Something went wrong: {ex.message}')
@@ -117,24 +188,7 @@ class Onboarding(commands.Cog):
 
                 logger.info(f'Connect account DM sent to {ctx.message.author.name}, waiting for response.')
 
-                def check_response(res):
-                    return res.channel.type == discord.ChannelType.private and res.author == ctx.message.author
-                valid = False
-                while not valid:
-                    response = await self.bot.wait_for('message', check=check_response)
-                    if (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), response.content)):
-                        valid = True
-                    else:
-                        message = await ctx.send(
-                            embed=ut.make_embed(
-                                name='Error:',
-                                value='Please send a valid name and tagline in the following format: <name>#<tagline>',
-                                color=ut.red
-                            ),
-                            view = CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
-                        )
-                        message_list.append(message)
-
+                response = await validate_name(self, user=ctx.message.author, message_list=message_list)
                 player = response.content.split('#')
                 await self.add_db_entry(user=ctx.message.author, player=player)
 
@@ -151,23 +205,7 @@ class Onboarding(commands.Cog):
                     )
                     message_list.append(message)
 
-                    def check_response(res):
-                        return res.channel.type == discord.ChannelType.private and res.author == ctx.message.author
-                    valid = False
-                    while not valid:
-                        response = await self.bot.wait_for('message', check=check_response)
-                        if (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), response.content)):
-                            valid = True
-                        else:
-                            message = await ctx.send(
-                                embed=ut.make_embed(
-                                    name='Error:',
-                                    value='Please send a valid name and tagline in the following format: <name>#<tagline>',
-                                    color=ut.red
-                                ),
-                                view = CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
-                            )
-                            message_list.append(message)
+                    response = await validate_name(self, user=ctx.message.author, message_list=message_list)
 
                     player = response.content.split('#')
                     await self.add_db_entry(user=ctx.message.author, player=player)
@@ -177,13 +215,13 @@ class Onboarding(commands.Cog):
 
         # Player already in db
         else:
-            #TODO: abfrage: "do you want to change the account? - yes - no -"
             await ctx.send(
                 embed=ut.make_embed(
                     name='Info:',
-                    value='Your account is already connected.',
+                    value='Your account is already connected.\n Do you want to change it?',
                     color=ut.blue_light
-                )
+                ),
+                view = ChangeAccountView(user=ctx.message.author, bot=self.bot, message_list=message_list)
             )
 
         for g in self.bot.guilds:
@@ -218,23 +256,7 @@ class Onboarding(commands.Cog):
 
             logger.info(f'Onboarding DM sent to {member.name}, waiting for response.')
 
-            def check_response(res):
-                return res.channel.type == discord.ChannelType.private and res.author == member
-            valid = False
-            while not valid:
-                response = await self.bot.wait_for('message', check=check_response)
-                if (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), response.content)):
-                    valid = True
-                else:
-                    message = await member.send(
-                        embed=ut.make_embed(
-                            name='Error:',
-                            value='Please send a valid name and tagline in the following format: <name>#<tagline>',
-                            color=ut.red
-                        ),
-                    view=CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
-                )
-                message_list.append(message)
+            response = await validate_name(self, user=member, message_list=message_list)
 
             player = response.content.split('#')
             await self.add_db_entry(user=member, player=player)
@@ -255,6 +277,27 @@ class Onboarding(commands.Cog):
                     color=ut.green
                 )
             )
+
+
+async def validate_name(self, user, message_list=[]):
+    def check_response(res):
+        return res.channel.type == discord.ChannelType.private and res.author == user
+    valid = False
+    while not valid:
+        response = await self.bot.wait_for('message', check=check_response)
+        if (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), response.content)):
+            valid = True
+        else:
+            message = await user.send(
+                embed=ut.make_embed(
+                    name='Error:',
+                    value='Please send a valid name and tagline in the following format: <name>#<tagline>',
+                    color=ut.red
+                ),
+                view=CancelView(target = asyncio.current_task(asyncio.get_running_loop()), message_list=message_list)
+            )
+            message_list.append(message)
+    return response
 
 
 async def setup(bot):

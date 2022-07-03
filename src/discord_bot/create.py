@@ -4,6 +4,7 @@ import valorant
 from .log_setup import logger
 
 
+# is being executed during startup
 async def roles(guild) -> None:
     """
     function makes sure all ranks defined in valorant.data.RANK_VALUE
@@ -36,6 +37,8 @@ async def roles(guild) -> None:
                 f"Role '{role_name}' has been created on {guild.name} - {guild.id}")
 
 
+# this function is not being used in the current version
+# could be useful in the future
 async def channels(guild) -> None:
     """
     function makes sure all channels defined exist.

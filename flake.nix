@@ -125,18 +125,7 @@
                     };
                   }))
 
-                # use requests 2.28.0, since version 2.27.2 is terrible broken
-                (requests.overrideAttrs
-                  (old: rec {
-                    pname = "requests";
-                    version = "2.28.0";
-                    src = fetchPypi {
-                      inherit pname version;
-                      hash = "sha256-1WhyOn69JYddjR6vXfoGjNL8gZSy5IPXsffIGRjb7Gs=";
-                    };
-                  }))
-
-                # we don't have to modify sqlalchemy, since it's developers still have some sanity in mind
+                requests
                 sqlalchemy
 
               ];

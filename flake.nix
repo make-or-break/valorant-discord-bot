@@ -151,7 +151,7 @@
 
               meta = with pkgs.lib; {
                 description = "valorant discord bot";
-                homepage = "https://github.com/MayNiklas/discord-bot-valorant-rank/";
+                homepage = "https://github.com/make-or-break/valorant-discord-bot/";
                 platforms = platforms.unix;
                 maintainers = with maintainers; [ mayniklas ];
               };

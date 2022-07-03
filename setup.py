@@ -15,14 +15,14 @@ setup(
     description='A discord bot for valorant communities',
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/MayNiklas/valorant-discord-bot',
+    url='https://github.com/make-or-break/valorant-discord-bot',
     license='',
     author='MayNiklas',
     author_email='info@niklas-steffen.de',
 
         project_urls={
-            'Bug Reports': 'https://github.com/MayNiklas/valorant-discord-bot/issues',
-            'Source': 'https://github.com/MayNiklas/valorant-discord-bot',
+            'Bug Reports': 'https://github.com/make-or-break/valorant-discord-bot/issues',
+            'Source': 'https://github.com/make-or-break/valorant-discord-bot',
         },
 
     keywords='discord-bot',

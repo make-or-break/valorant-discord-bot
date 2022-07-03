@@ -43,7 +43,7 @@ export TOKEN="<your-API-token>"
 ```nix
 {
   inputs.discord-bot-valorant = {
-    url = "github:mayniklas/valorant-discord-bot";
+    url = "github:make-or-break/valorant-discord-bot";
     inputs = {
       # use the nixpkgs defined in this flake!
       # python3Packages.requests is currently broken!

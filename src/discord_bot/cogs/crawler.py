@@ -31,14 +31,8 @@ class Crawler(commands.Cog):
             player_json = valorant.get_player_json_by_puuid(player.puuid)
             rank_tier_new = valorant.get_rank_tier(player_json)
             rank_tier_before = player.rank_tier
-            # TODO: get username and tagline from json too, to cover case when a user changes name
-            logger.info(f'Updating {player.id} in db, with {rank_tier_before}, {rank_tier_new}')
-            try:
-                db.update_player(id=player.id, elo=valorant.get_elo(player_json), rank=valorant.RANK_VALUE[rank_tier_new]['name'], rank_tier=rank_tier_new, username=valorant.get_name(player_json), tagline=valorant.get_tag(player_json), puuid=valorant.get_puuid(player_json))
-            except Exception as ex:
-                logger.warn(f'Error: {ex.message}')
-
-            logger.info('Updated db')
+            logger.info(f'Updating {player.username} with id {player.id} in db')
+            db.update_player(id=player.id, elo=valorant.get_elo(player_json), rank=valorant.RANK_VALUE[rank_tier_new]['name'], rank_tier=rank_tier_new, username=valorant.get_name(player_json), tagline=valorant.get_tag(player_json), puuid=player.puuid)
             for g in self.bot.guilds:
                 m = g.get_member(player.id)
                 if m:

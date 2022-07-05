@@ -82,7 +82,7 @@ class Help(commands.Cog):
             # setting information about author
             emb.add_field(name='About',
                           value=f'This bot is maintained by {owner}.\n\
-                                Please visit https://github.com/MayNiklas/valorant-discord-bot to submit ideas or bugs.\n\
+                                Please visit https://github.com/make-or-break/valorant-discord-bot to submit ideas or bugs.\n\
                                 Based on a template by nonchris: https://github.com/nonchris/discord-bot.\n')
             emb.set_footer(text=f'Bot is running Version: {VERSION}')
 
@@ -124,7 +124,7 @@ class Help(commands.Cog):
             emb = discord.Embed(title="It's a magical place.",
                                 description="I don't know how you got here. But I didn't see this coming at all.\n"
                                             'Would you please be so kind to report that issue to me on github?\n'
-                                            'https://github.com/MayNiklas/discord-bot-valorant-rank/issues\n'
+                                            'https://github.com/make-or-break/valorant-discord-bot/issues\n'
                                             'Thank you!',
                                 color=utl.orange)
 

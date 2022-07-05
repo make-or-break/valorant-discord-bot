@@ -81,6 +81,22 @@ def get_puuid(data):
     return (data['data']['puuid'])
 
 
+def get_name(data):
+    """
+    Get the name of a player.
+    """
+
+    return (data['data']['name'])
+
+
+def get_tag(data):
+    """
+    Get the tagline of a player.
+    """
+
+    return (data['data']['tag'])
+
+
 ###############################################################################
 # code related to getting match history
 

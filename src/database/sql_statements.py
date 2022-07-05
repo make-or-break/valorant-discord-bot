@@ -31,6 +31,13 @@ def update_player(id, elo, rank, rank_tier, username, tagline, puuid, session=db
     session.commit()
 
 
+def get_all_players(session=db.open_session()):
+    """
+    Get all players from the database
+    """
+    return session.query(db.Player).all()
+
+
 def get_player(id, session=db.open_session()):
     """
     Get the player from the database

@@ -75,7 +75,7 @@ async def on_ready():
     # TODO: Register your extensions here
     initial_extensions = [
         '.cogs.onboarding',
-        #TODO: Add Crawler wich checks the tracked players for changes and updates the db + sends congrats on new ranks
+        '.cogs.crawler',
         '.cogs.help'
     ]
 

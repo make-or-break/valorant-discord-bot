@@ -76,25 +76,24 @@ class ChangeAccountView(discord.ui.View):
 
         rank_tier_before = db.get_player(id=self.user.id).rank_tier
         rank_tier_new = valorant.get_rank_tier(player_json)
-        db.update_player(id=self.user.id, elo=valorant.get_elo(player_json), rank=valorant.RANK_VALUE[valorant.get_rank_tier(player_json)]['name'], rank_tier=rank_tier_new, username=player[0], tagline=player[1], puuid=valorant.get_puuid(player_json))
+        db.update_player(id=self.user.id, elo=valorant.get_elo(player_json), rank=valorant.RANK_VALUE[rank_tier_new]['name'], rank_tier=rank_tier_new, username=player[0], tagline=player[1], puuid=valorant.get_puuid(player_json))
 
         for g in self.bot.guilds:
-            for m in g.members:
-                if m == self.user:
-                    new_role = discord.utils.get(m.guild.roles, name=valorant.RANK_VALUE[rank_tier_new]['name'])
-                    old_role = discord.utils.get(m.guild.roles, name=valorant.RANK_VALUE[rank_tier_before]['name'])
-                    if not new_role:
-                        new_role = await m.guild.create_role(name=valorant.RANK_VALUE[rank_tier_new]['name'], color=discord.Color.from_rgb(*valorant.RANK_VALUE[rank_tier_new]['color']), mentionable = True, hoist = True, reason = 'User joint the Server and did the onboarding flow')
+            m = g.get_member(self.user.id)
+            if m:
+                new_role = discord.utils.get(g.roles, name=valorant.RANK_VALUE[rank_tier_new]['name'])
+                old_role = discord.utils.get(g.roles, name=valorant.RANK_VALUE[rank_tier_before]['name'])
+                if not new_role:
+                    new_role = await g.create_role(name=valorant.RANK_VALUE[rank_tier_new]['name'], color=discord.Color.from_rgb(*valorant.RANK_VALUE[rank_tier_new]['color']), mentionable = True, hoist = True, reason = 'User joint the Server and did the onboarding flow')
 
-                    # add the role to the user
-                    if new_role not in m.roles:
-                        #TODO: Remove old role
-                        await m.remove_roles(old_role)
-                        logger.info(f'Removed role {old_role.name} from user {m.name}!')
-                        await m.add_roles(new_role)
-                        logger.info(f'Added role {new_role.name} to user {m.name}!')
-                    else:
-                        logger.info(f'Member {m.name} already has role {new_role.name}!')
+                # add the role to the user
+                if new_role not in m.roles:
+                    await m.remove_roles(old_role)
+                    logger.info(f'Removed role {old_role.name} from user {m.name}!')
+                    await m.add_roles(new_role)
+                    logger.info(f'Added role {new_role.name} to user {m.name}!')
+                else:
+                    logger.info(f'Member {m.name} already has role {new_role.name}!')
 
 
     @discord.ui.button(label='No', style=discord.ButtonStyle.red)
@@ -147,8 +146,7 @@ class Onboarding(commands.Cog):
     @commands.command(name='connect', help='Connect your Valorant account to your Discord account')
     async def connect(self, ctx, *params):
         """!
-        Connect your Valorant Account to your Discord account.
-        If you are already connected you can use this command to change the connected account.
+        Connect your Valorant Account to your Discord account. If you are already connected you can use this command to change the connected account.
         @param ctx Context of the message
         @param params further arguments
         """

@@ -146,6 +146,24 @@
               };
             };
 
+          # Documenation for this feature: https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/docker/examples.nix
+          # nix build .#docker-image 
+          # docker load < result
+          docker-image = pkgs.dockerTools.buildLayeredImage {
+            name = "valorant-discord-bot";
+            # needed so we can enter the container using bash
+            contents = [
+              pkgs.coreutils
+              pkgs.bash
+            ];
+            config = {
+              Cmd = [ "${self.packages.${system}.valorant-discord-bot}/bin/valorant-discord-bot" ];
+              Env = [
+                "TOKEN=discord_token"
+              ];
+            };
+          };
+
         };
 
 

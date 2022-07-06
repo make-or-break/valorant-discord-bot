@@ -147,7 +147,7 @@
             };
 
           # Documenation for this feature: https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/docker/examples.nix
-          # nix build .#docker-image 
+          # nix build .#docker-image
           # docker load < result
           docker-image = pkgs.dockerTools.buildLayeredImage {
             name = "valorant-discord-bot";

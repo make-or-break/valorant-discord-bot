@@ -1,5 +1,10 @@
 # Valorant Rank information with rank_tier as key
 RANK_VALUE = {
+    0: {
+        'name': 'Unranked',
+        'elo': 'null',
+        'color': (255, 255, 255)
+    },
     3: {
         'name': 'Iron I',
         'elo': '0',

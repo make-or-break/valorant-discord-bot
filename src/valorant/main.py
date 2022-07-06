@@ -69,8 +69,10 @@ def get_rank_tier(data):
     """
     Get the rank tier of a player.
     """
-
-    return (data['data']['current_data']['currenttier'])
+    d = data['data']['current_data']['currenttier']
+    if not d:
+        d = 0
+    return (d)
 
 
 def get_puuid(data):

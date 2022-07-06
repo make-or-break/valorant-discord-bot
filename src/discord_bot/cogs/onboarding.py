@@ -3,14 +3,13 @@ import re
 
 import discord
 from discord.ext import commands
+from sqlalchemy import null
 
 import valorant
 from ..log_setup import logger
 from ..utils import utils as ut
 from database import sql_statements as db
 
-
-#TODO: Bei Rollen Vergabe, alte Rolle wegnehmen
 
 # Button View for canceling the current dialog
 class CancelView(discord.ui.View):
@@ -46,7 +45,6 @@ class ChangeAccountView(discord.ui.View):
         self.message_list=message_list
 
 
-    #TODO: ask for name + validation and db update and roll remove / update
     @discord.ui.button(label='Yes', style=discord.ButtonStyle.green)
     async def yes_button(self, interaction:discord.Interaction, child:discord.ui.Button):
         # Disable buttons
@@ -104,6 +102,7 @@ class ChangeAccountView(discord.ui.View):
         await interaction.response.edit_message(view=self)
 
 
+#TODO: add admin commands: remove player from db, add player to db by admin.
 
 ### @package onboarding
 #
@@ -190,6 +189,14 @@ class Onboarding(commands.Cog):
                 player = response.content.split('#')
                 await self.add_db_entry(user=ctx.message.author, player=player)
 
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='Success',
+                        value='You were added to the db.',
+                        color=ut.green
+                    )
+                )
+
             # Valorant name in params
             else:
                 if not (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), params[0])):
@@ -211,6 +218,14 @@ class Onboarding(commands.Cog):
                     player = params[0].split('#')
                     await self.add_db_entry(user=ctx.message.author, player=player)
 
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='Success',
+                        value='You were added to the db.',
+                        color=ut.green
+                    )
+                )
+
         # Player already in db
         else:
             await ctx.send(
@@ -223,10 +238,9 @@ class Onboarding(commands.Cog):
             )
 
         for g in self.bot.guilds:
-            for m in g.members:
-                if m == ctx.message.author:
-                    await self.add_role(member=m, rank_tier=db.get_player(ctx.author.id).rank_tier)
-                    break
+            m = g.get_member(ctx.message.author.id)
+            if m:
+                await self.add_role(member=m, rank_tier=db.get_player(ctx.author.id).rank_tier)
 
 
     # Event listener, wich does an onboarding flow if a new user is joining.
@@ -263,7 +277,7 @@ class Onboarding(commands.Cog):
                 embed=ut.make_embed(
                     name='Info',
                     value=f'I gave you your matching role: {role.name}',
-                    color=ut.blue_light
+                    color=ut.green
                 )
             )
         else:

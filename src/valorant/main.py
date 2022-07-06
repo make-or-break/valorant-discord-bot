@@ -117,6 +117,20 @@ def get_matches_json(Username, Tagline):
     else:
         return(None)
 
+def get_matches_json_by_puuid(puuid):
+    """
+    Get the last 5 matches that where played by this user
+    """
+
+    api_url = 'https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/eu/'+ puuid+'?filter=competitive'
+
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        return(response.json())
+    else:
+        return(None)
+
 
 def get_matchid(data):
     """

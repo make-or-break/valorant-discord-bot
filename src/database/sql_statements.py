@@ -3,6 +3,8 @@ from sqlalchemy import update
 
 import database.sql_scheme as db
 
+################################################################################
+# db statements relevant to the player table used by the discord-bot
 
 def add_player(id, elo, rank, rank_tier, username, tagline, puuid, session=db.open_session()):
     """
@@ -49,3 +51,21 @@ def player_exists(id, session=db.open_session()):
     Check if the player exists in the database
     """
     return session.query(db.Player).filter(db.Player.id == id).first() is not None
+
+################################################################################
+# db statements relevant to the matches table used by the match crawler
+
+def add_match(puuid, match_id, session=db.open_session()):
+    """
+    Add a match to the DB.
+    """
+    entry = db.Match(puuid=puuid, match_id=match_id)
+    print(f'Add match to database! puuid: {puuid} - match_id: {match_id}')
+    session.add(entry)
+    session.commit()
+
+def match_exists(puuid, match_id, session=db.open_session()):
+    """
+    Check if the match exists in the database
+    """
+    return session.query(db.Match).filter(db.Match.puuid == puuid, db.Match.match_id == match_id).first() is not None

@@ -32,6 +32,15 @@ try:
         def __repr__(self):
             return f"id='{self.id}', username='{self.username}', tagline='{self.tagline}', elo='{self.elo}', rank='{self.rank}', rank_tier='{self.rank_tier}'"
 
+    class Match(Base):
+        __tablename__ = 'matches'
+        id = Column(Integer, primary_key=True)
+        puuid = Column(String)
+        match_id = Column(String)
+
+        def __repr__(self):
+            return f"id='{self.id}', puuid='{self.puuid}', match_id='{self.match_id}'"
+
     Base.metadata.create_all(engine)
 
     @event.listens_for(Base.metadata, 'after_create')

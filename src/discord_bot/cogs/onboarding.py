@@ -76,6 +76,14 @@ class ChangeAccountView(discord.ui.View):
         rank_tier_new = valorant.get_rank_tier(player_json)
         db.update_player(id=self.user.id, elo=valorant.get_elo(player_json), rank=valorant.RANK_VALUE[rank_tier_new]['name'], rank_tier=rank_tier_new, username=player[0], tagline=player[1], puuid=valorant.get_puuid(player_json))
 
+        await self.user.send(
+            embed=ut.make_embed(
+                name='Success',
+                value='You were added to the db.',
+                color=ut.green
+            )
+        )
+
         for g in self.bot.guilds:
             m = g.get_member(self.user.id)
             if m:

@@ -53,35 +53,3 @@ def player_exists(id, session=db.open_session()):
     Check if the player exists in the database
     """
     return session.query(db.Player).filter(db.Player.id == id).first() is not None
-
-################################################################################
-# db statements relevant to the matches table used by the match crawler
-
-
-def add_match(puuid, match_id, match_start, match_length, match_rounds, match_mmr_change, match_elo, match_map, session=db.open_session()):
-    """
-    Add a match to the DB.
-    """
-
-    entry = db.Match(
-        puuid=puuid,
-        match_id=match_id,
-        match_start=match_start,
-        match_length=match_length,
-        match_rounds=match_rounds,
-        match_mmr_change=match_mmr_change,
-        match_elo=match_elo,
-        match_map=match_map
-    )
-
-    print(
-        f'Add match to database! puuid: {puuid} - match_id: {match_id} - match_start: {match_start} - match_length: {match_length} - match_rounds: {match_rounds} - match_mmr_change: {match_mmr_change} - match_elo: {match_elo} - match_map: {match_map}')
-    session.add(entry)
-    session.commit()
-
-
-def match_exists(puuid, match_id, session=db.open_session()):
-    """
-    Check if the match exists in the database
-    """
-    return session.query(db.Match).filter(db.Match.puuid == puuid, db.Match.match_id == match_id).first() is not None

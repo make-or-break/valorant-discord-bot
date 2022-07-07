@@ -15,22 +15,24 @@ if not os.path.exists('data/'):
     os.mkdir('data/')
 
 try:
-    engine = create_engine('sqlite:///data/players.db')
+    engine = create_engine('sqlite:///data/matches.db')
     connection = engine.connect()
     Base = declarative_base()
 
-    class Player(Base):
-        __tablename__ = 'players'
-        elo = Column(Integer)
+    class Match(Base):
+        __tablename__ = 'matches'
         id = Column(Integer, primary_key=True)
         puuid = Column(String)
-        rank = Column(String)
-        rank_tier = Column(Integer)
-        tagline = Column(String)
-        username = Column(String)
+        match_elo = Column(Integer)
+        match_id = Column(String)
+        match_length = Column(String)
+        match_map = Column(String)
+        match_mmr_change = Column(String)
+        match_rounds = Column(Integer)
+        match_start = Column(String)
 
         def __repr__(self):
-            return f"id='{self.id}', username='{self.username}', tagline='{self.tagline}', elo='{self.elo}', rank='{self.rank}', rank_tier='{self.rank_tier}'"
+            return f"id='{self.id}', puuid='{self.puuid}', match_id='{self.match_id}'"
 
     Base.metadata.create_all(engine)
 

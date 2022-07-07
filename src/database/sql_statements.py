@@ -6,6 +6,7 @@ import database.sql_scheme as db
 ################################################################################
 # db statements relevant to the player table used by the discord-bot
 
+
 def add_player(id, elo, rank, rank_tier, username, tagline, puuid, session=db.open_session()):
     """
     Add an entry to the players database
@@ -46,6 +47,7 @@ def get_player(id, session=db.open_session()):
     """
     return session.query(db.Player).filter(db.Player.id == id).first()
 
+
 def player_exists(id, session=db.open_session()):
     """
     Check if the player exists in the database
@@ -55,14 +57,26 @@ def player_exists(id, session=db.open_session()):
 ################################################################################
 # db statements relevant to the matches table used by the match crawler
 
-def add_match(puuid, match_id, session=db.open_session()):
+
+def add_match(puuid, match_id, match_start, match_length, match_rounds, match_map, session=db.open_session()):
     """
     Add a match to the DB.
     """
-    entry = db.Match(puuid=puuid, match_id=match_id)
-    print(f'Add match to database! puuid: {puuid} - match_id: {match_id}')
+
+    entry = db.Match(
+        puuid=puuid,
+        match_id=match_id,
+        match_start=match_start,
+        match_length=match_length,
+        match_rounds=match_rounds,
+        match_map=match_map
+    )
+
+    print(
+        f'Add match to database! puuid: {puuid} - match_id: {match_id} - match_start: {match_start} - match_length: {match_length} - match_rounds: {match_rounds} - match_map: {match_map}')
     session.add(entry)
     session.commit()
+
 
 def match_exists(puuid, match_id, session=db.open_session()):
     """

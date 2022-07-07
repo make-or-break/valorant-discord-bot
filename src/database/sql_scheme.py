@@ -37,6 +37,10 @@ try:
         id = Column(Integer, primary_key=True)
         puuid = Column(String)
         match_id = Column(String)
+        match_length = Column(String)
+        match_map = Column(String)
+        match_rounds = Column(Integer)
+        match_start = Column(String)
 
         def __repr__(self):
             return f"id='{self.id}', puuid='{self.puuid}', match_id='{self.match_id}'"

@@ -12,7 +12,7 @@ def add_player(id, elo, rank, rank_tier, username, tagline, puuid, session=db.op
     Add an entry to the players database
     """
     entry = db.Player(id=id, username=username, elo=elo,
-                       rank=rank, rank_tier=rank_tier, tagline=tagline, puuid=puuid)
+                      rank=rank, rank_tier=rank_tier, tagline=tagline, puuid=puuid)
     print(
         f'Add to database! id: {id} Username: {username} - elo: {elo} - rank: {rank} - rank_tier: {rank_tier} - tagline: {tagline} - puuid: {puuid}')
     session.add(entry)
@@ -58,7 +58,7 @@ def player_exists(id, session=db.open_session()):
 # db statements relevant to the matches table used by the match crawler
 
 
-def add_match(puuid, match_id, match_start, match_length, match_rounds, match_map, session=db.open_session()):
+def add_match(puuid, match_id, match_start, match_length, match_rounds, match_mmr_change, match_elo, match_map, session=db.open_session()):
     """
     Add a match to the DB.
     """
@@ -69,11 +69,13 @@ def add_match(puuid, match_id, match_start, match_length, match_rounds, match_ma
         match_start=match_start,
         match_length=match_length,
         match_rounds=match_rounds,
+        match_mmr_change=match_mmr_change,
+        match_elo=match_elo,
         match_map=match_map
     )
 
     print(
-        f'Add match to database! puuid: {puuid} - match_id: {match_id} - match_start: {match_start} - match_length: {match_length} - match_rounds: {match_rounds} - match_map: {match_map}')
+        f'Add match to database! puuid: {puuid} - match_id: {match_id} - match_start: {match_start} - match_length: {match_length} - match_rounds: {match_rounds} - match_mmr_change: {match_mmr_change} - match_elo: {match_elo} - match_map: {match_map}')
     session.add(entry)
     session.commit()
 

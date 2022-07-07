@@ -36,9 +36,11 @@ try:
         __tablename__ = 'matches'
         id = Column(Integer, primary_key=True)
         puuid = Column(String)
+        match_elo = Column(Integer)
         match_id = Column(String)
         match_length = Column(String)
         match_map = Column(String)
+        match_mmr_change = Column(String)
         match_rounds = Column(Integer)
         match_start = Column(String)
 

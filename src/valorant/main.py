@@ -117,12 +117,14 @@ def get_matches_json(Username, Tagline):
     else:
         return(None)
 
+
 def get_matches_json_by_puuid(puuid):
     """
     Get the last 5 matches that where played by this user
     """
 
-    api_url = 'https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/eu/'+ puuid+'?filter=competitive'
+    api_url = 'https://api.henrikdev.xyz/valorant/v3/by-puuid/matches/eu/' + \
+        puuid+'?filter=competitive'
 
     response = requests.get(api_url)
 
@@ -150,9 +152,48 @@ def get_match_ids(data):
         ids.append(i['metadata']['matchid'])
     return ids
 
+###############################################################################
+
+# code related to getting MMR history
+
+
+def get_mmr_json(puuid):
+    """
+    Get the MMR history of a player.
+    """
+
+    api_url = 'https://api.henrikdev.xyz/valorant/v1/by-puuid/mmr-history/eu/' + puuid
+
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        return(response.json())
+    else:
+        return(None)
+
+
+def get_mmr_change(data, date):
+    """
+    Get the MMR change of the last match.
+    """
+
+    for match in (data['data']):
+        if (match['date_raw'] == date):
+            return (match['mmr_change_to_last_game'])
+
+
+def get_mmr_elo(data, date):
+    """
+    Get elo of player after the last match.
+    """
+
+    for match in (data['data']):
+        if (match['date_raw'] == date):
+            return (match['elo'])
 
 ###############################################################################
 # code related to getting match stats
+
 
 def get_match_json(matchid):
     """

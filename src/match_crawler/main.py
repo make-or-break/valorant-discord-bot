@@ -1,5 +1,5 @@
 import valorant
-from match_crawler.database import sql_statements as db
+from .database import sql_statements as db
 
 
 def matches_by_puuid(puuid):

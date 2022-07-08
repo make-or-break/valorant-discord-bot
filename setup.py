@@ -57,6 +57,9 @@ setup(
     packages=find_packages(where='src/'),
 
     entry_points={
-        'console_scripts': ['valorant-discord-bot=discord_bot:main']
-            }
+        'console_scripts': [
+            'valorant-discord-bot=discord_bot:main',
+            'valorant-match-crawler=match_crawler:check_new_matches'
+        ]
+    }
 )

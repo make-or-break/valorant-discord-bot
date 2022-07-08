@@ -1,8 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy import update
 
-import match_crawler.database.sql_scheme as db
 import valorant
+from ..database import sql_scheme as db
 
 
 #############################################################################################

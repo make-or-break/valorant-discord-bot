@@ -9,29 +9,31 @@
   outputs = { self, nixpkgs, flake-utils, ... }:
 
     {
-      nixosModules.default = self.nixosModules.valorant-discord-bot;
-      nixosModules.valorant-discord-bot = { lib, pkgs, config, ... }:
+      nixosModules.default = self.nixosModules.valorant;
+      nixosModules.valorant = { lib, pkgs, config, ... }:
         with lib;
 
-        let cfg = config.services.valorant-discord-bot;
+        let cfg = config.services.valorant;
         in
         {
 
-          options.services.valorant-discord-bot = {
+          options.services.valorant = {
 
             enable = mkEnableOption "valorant-discord-bot";
 
+            match_crawler = mkEnableOption "match crawler";
+
             dataDir = mkOption {
               type = types.str;
-              default = "/var/lib/valorant-discord-bot";
+              default = "/var/lib/valorant";
               description = ''
-                The directory where valorant-discord-bot stores its data files. If left as the default value this directory will automatically be created before the discord server starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.
+                The directory where valorant services store their data files. If left as the default value this directory will automatically be created before the server starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.
               '';
             };
 
             envfile = mkOption {
               type = types.str;
-              default = "/var/src/secrets/valorant-discord-bot/envfile";
+              default = "/var/src/secrets/valorant/envfile";
               description = ''
                 The location of the envfile containing secrets
               '';
@@ -39,14 +41,14 @@
 
             user = mkOption {
               type = types.str;
-              default = "valorant-discord-bot";
-              description = "User account under which valorant-discord-bot runs.";
+              default = "valorant";
+              description = "User account under which valorant services run.";
             };
 
             group = mkOption {
               type = types.str;
-              default = "valorant-discord-bot";
-              description = "Group under which valorant-discord-bot runs.";
+              default = "valorant";
+              description = "Group under which which valorant services run.";
             };
 
           };
@@ -65,23 +67,49 @@
                   ExecStart = "${self.packages."${pkgs.system}".valorant-discord-bot}/bin/valorant-discord-bot";
                   Restart = "on-failure";
                 }
-                (mkIf (cfg.dataDir == "/var/lib/valorant-discord-bot") {
-                  StateDirectory = "valorant-discord-bot";
+                (mkIf (cfg.dataDir == "/var/lib/valorant") {
+                  StateDirectory = "valorant";
                 })
               ];
-
             };
 
-            users.users = mkIf (cfg.user == "valorant-discord-bot") {
-              valorant-discord-bot = {
-                isSystemUser = true;
-                group = cfg.group;
-                description = "valorant-discord-bot system user";
+            # valorant match crawler service
+            systemd.timers.valorant-match-crawler = mkIf cfg.match_crawler {
+              wantedBy = [ "timers.target" ];
+              partOf = [ "valorant-match-crawler.service" ];
+              timerConfig.OnCalendar = "*-*-* *:00:00";
+            };
+
+            systemd.services.valorant-match-crawler = mkIf cfg.match_crawler {
+              serviceConfig = mkMerge [
+                {
+                  User = cfg.user;
+                  Group = cfg.group;
+                  WorkingDirectory = cfg.dataDir;
+                  Type = "oneshot";
+                  ExecStart = "${self.packages."${pkgs.system}".valorant-discord-bot}/bin/valorant-match-crawler";
+                }
+                (mkIf (cfg.dataDir == "/var/lib/valorant") {
+                  StateDirectory = "valorant";
+                })
+              ];
+            };
+
+
+            users.users = mkIf
+              (cfg.user == "valorant")
+              {
+                valorant = {
+                  isSystemUser = true;
+                  group = cfg.group;
+                  description = "valorant system user";
+                };
               };
-            };
 
             users.groups =
-              mkIf (cfg.group == "valorant-discord-bot") { valorant-discord-bot = { }; };
+              mkIf
+                (cfg.group == "valorant")
+                { valorant = { }; };
 
           };
           meta = { maintainers = with lib.maintainers; [ mayniklas ]; };

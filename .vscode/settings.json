@@ -1,0 +1,15 @@
+{
+    "[python]": {
+        // format python on save
+        // "editor.formatOnSave": true
+    },
+    // save files after every change
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 1000,
+    // use autopep8 as formatter
+    "python.formatting.provider": "autopep8",
+    // configure python linting
+    "python.linting.enabled": true,
+    "python.linting.lintOnSave": true,
+    "python.linting.pycodestyleEnabled": true
+}

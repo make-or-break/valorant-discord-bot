@@ -2,6 +2,7 @@ import os
 import sys
 
 import sqlalchemy
+from sqlalchemy import BOOLEAN
 from sqlalchemy import Column
 from sqlalchemy import create_engine
 from sqlalchemy import event
@@ -33,6 +34,15 @@ try:
 
         def __repr__(self):
             return f"id='{self.id}', puuid='{self.puuid}', match_id='{self.match_id}'"
+
+    class User(Base):
+        __tablename__ = 'users'
+        id = Column(Integer, primary_key=True)
+        puuid = Column(String)
+        tracked = Column(BOOLEAN)
+
+        def __repr__(self):
+            return f"id='{self.id}', puuid='{self.puuid}', tracked='{self.tracked}'"
 
     Base.metadata.create_all(engine)
 

@@ -1,8 +1,61 @@
 from sqlalchemy import select
 from sqlalchemy import update
 
-import valorant
 import match_crawler.database.sql_scheme as db
+import valorant
+
+
+#############################################################################################
+# User handling
+#############################################################################################
+
+def add_user(puuid, tracked, session=db.open_session()):
+    """
+    Add a user to the DB.
+    """
+
+    if user_exists(puuid, session):
+        print(f'User {puuid} already exists in DB!')
+        pass
+    else:
+        entry = db.User(puuid=puuid, tracked=tracked)
+        session.add(entry)
+        session.commit()
+        print(f'Added user to database: {puuid} - {tracked}')
+
+
+def update_tracking(puuid, tracked, session=db.open_session()):
+    """
+    Update the tracking status of a user in the DB.
+    Create the user if it does not exist.
+    """
+
+    if user_exists(puuid, session):
+        entry = session.query(db.User).filter(db.User.puuid == puuid).first()
+        entry.tracked = tracked
+        session.commit()
+        print(f'Updated tracking status of user {puuid} to {tracked}')
+    else:
+        add_user(puuid, tracked)
+        pass
+
+
+def user_exists(puuid, session=db.open_session()):
+    """
+    Check if the user exists in the database
+    """
+    return session.query(db.User).filter(db.User.puuid == puuid).first() is not None
+
+
+def get_tracked_users(session=db.open_session()):
+    """
+    Get all tracked users from the DB.
+    """
+    return session.query(db.User).filter(db.User.tracked == True).all()
+
+#############################################################################################
+# Match handling
+#############################################################################################
 
 
 def match_exists(puuid, match_id, session=db.open_session()):

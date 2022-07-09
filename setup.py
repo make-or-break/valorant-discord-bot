@@ -58,8 +58,7 @@ setup(
 
     entry_points={
         'console_scripts': [
-            'valorant-discord-bot=discord_bot:main',
-            'valorant-match-crawler=match_crawler:check_new_matches'
+            'valorant-discord-bot=discord_bot:main'
         ]
     }
 )

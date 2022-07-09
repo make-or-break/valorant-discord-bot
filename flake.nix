@@ -18,15 +18,15 @@
   outputs = { self, nixpkgs, flake-utils, ... }:
 
     {
-      nixosModules.default = self.nixosModules.valorant;
-      nixosModules.valorant = { lib, pkgs, config, ... }:
+      nixosModules.default = self.nixosModules.valorant-discord-bot;
+      nixosModules.valorant-discord-bot = { lib, pkgs, config, ... }:
         with lib;
 
-        let cfg = config.services.valorant;
+        let cfg = config.services.valorant-discord-bot;
         in
         {
 
-          options.services.valorant = {
+          options.services.valorant-discord-bot = {
 
             enable = mkEnableOption "valorant-discord-bot";
 

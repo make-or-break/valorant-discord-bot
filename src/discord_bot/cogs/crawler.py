@@ -118,8 +118,6 @@ class Crawler(commands.Cog):
             color = ut.red
             diff = f'-{diff}'
 
-        print(diff)
-
         await ctx.send(
             embed=ut.make_embed(
                 name='elo:',
@@ -127,6 +125,14 @@ class Crawler(commands.Cog):
                     elo: {diff}\n\
                     matches: {matches}',
                 color=color
+            )
+        )
+
+        await ctx.send(
+            embed=ut.make_embed(
+                name='history:',
+                value=f'{match_crawler.get_match_history(puuid,1)}',
+                color=ut.green
             )
         )
         return

@@ -2,8 +2,17 @@
   description = "valorant discord bot";
 
   inputs = {
+
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+
+    valorant-utils = {
+      url = "github:make-or-break/valorant-utils";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
+
+
   };
 
   outputs = { self, nixpkgs, flake-utils, ... }:
@@ -137,6 +146,9 @@
               src = self;
               propagatedBuildInputs = [
 
+                # flake inputs
+                self.inputs.valorant-utils.packages.${system}.valorant-utils
+
                 # we want to use discordpy 2.0.0a
                 # but it's not available in nixpkgs yet (it's still in alpha)
                 # discord.py uses a newer API version with new features
@@ -162,8 +174,6 @@
               pythonImportsCheck = [
                 "database.sql_scheme"
                 "database.sql_statements"
-
-                "valorant"
               ];
 
               meta = with pkgs.lib; {

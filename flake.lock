@@ -34,7 +34,31 @@
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "valorant-utils": "valorant-utils"
+      }
+    },
+    "valorant-utils": {
+      "inputs": {
+        "flake-utils": [
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1657351839,
+        "narHash": "sha256-bnATJmTpbLMYUnxj0+o7pXJZer1R/9HnewlOGCTZsck=",
+        "owner": "make-or-break",
+        "repo": "valorant-utils",
+        "rev": "431cf20aeb254ce2a5753c64197f5bb1e7d3e684",
+        "type": "github"
+      },
+      "original": {
+        "owner": "make-or-break",
+        "repo": "valorant-utils",
+        "type": "github"
       }
     }
   },

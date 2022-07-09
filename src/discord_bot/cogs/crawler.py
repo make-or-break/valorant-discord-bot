@@ -95,6 +95,43 @@ class Crawler(commands.Cog):
                 return
 
     ####################################################################################################################
+    # get elo stats
+    # user needs to have tracking enabled
+    ####################################################################################################################
+
+    @commands.command(name='elo')
+    async def elo_command(self, ctx):
+        """
+        send elo stats to user
+        """
+
+        # get corresponding puuid from db
+        puuid = (db.get_player(ctx.author.id).puuid)
+
+        matches = match_crawler.matches_within_time(puuid, 1)
+        diff = match_crawler.get_elo_over_matches(puuid, matches)
+
+        if diff > 0:
+            color = ut.green
+            diff = f'+{diff}'
+        else:
+            color = ut.red
+            diff = f'-{diff}'
+
+        print(diff)
+
+        await ctx.send(
+            embed=ut.make_embed(
+                name='elo:',
+                value=f'last 24h:\n\
+                    elo: {diff}\n\
+                    matches: {matches}',
+                color=color
+            )
+        )
+        return
+
+    ####################################################################################################################
 
     # Task wich crawles the stats of the tracked players and updates the database
     @tasks.loop(minutes=20.0)

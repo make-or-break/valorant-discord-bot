@@ -30,13 +30,11 @@
 
             enable = mkEnableOption "valorant-discord-bot";
 
-            match_crawler = mkEnableOption "match crawler";
-
             dataDir = mkOption {
               type = types.str;
               default = "/var/lib/valorant";
               description = ''
-                The directory where valorant services store their data files. If left as the default value this directory will automatically be created before the server starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.
+                The directory where valorant discord bot stores it's data files. If left as the default value this directory will automatically be created before the server starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.
               '';
             };
 
@@ -81,29 +79,6 @@
                 })
               ];
             };
-
-            # valorant match crawler service
-            systemd.timers.valorant-match-crawler = mkIf cfg.match_crawler {
-              wantedBy = [ "timers.target" ];
-              partOf = [ "valorant-match-crawler.service" ];
-              timerConfig.OnCalendar = "*-*-* *:00:00";
-            };
-
-            systemd.services.valorant-match-crawler = mkIf cfg.match_crawler {
-              serviceConfig = mkMerge [
-                {
-                  User = cfg.user;
-                  Group = cfg.group;
-                  WorkingDirectory = cfg.dataDir;
-                  Type = "oneshot";
-                  ExecStart = "${self.packages."${pkgs.system}".valorant-discord-bot}/bin/valorant-match-crawler";
-                }
-                (mkIf (cfg.dataDir == "/var/lib/valorant") {
-                  StateDirectory = "valorant";
-                })
-              ];
-            };
-
 
             users.users = mkIf
               (cfg.user == "valorant")

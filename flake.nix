@@ -12,6 +12,13 @@
       inputs.flake-utils.follows = "flake-utils";
     };
 
+    valorant-match-history = {
+      url = "github:make-or-break/valorant-match-history";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.valorant-utils.follows = "valorant-utils";
+    };
+
 
   };
 
@@ -123,6 +130,7 @@
 
                 # flake inputs
                 self.inputs.valorant-utils.packages.${system}.valorant-utils
+                self.inputs.valorant-match-history.packages.${system}.valorant-match-history
 
                 # we want to use discordpy 2.0.0a
                 # but it's not available in nixpkgs yet (it's still in alpha)

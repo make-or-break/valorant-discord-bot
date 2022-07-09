@@ -1,9 +1,9 @@
 import discord
 import match_crawler
+import valorant
 from discord.ext import commands
 from discord.ext import tasks
 
-import valorant
 from ..log_setup import logger
 from ..utils import utils as ut
 from database import sql_statements as db
@@ -51,42 +51,49 @@ class Crawler(commands.Cog):
         puuid = (db.get_player(ctx.author.id).puuid)
 
         # check if user allready exists in db
-        if match_crawler.user_exists(puuid):
+        if not match_crawler.user_exists(puuid):
 
-            for user in match_crawler.get_tracked_users():
-
-                if user.puuid == puuid:
-                    match_crawler.update_tracking(puuid, False)
-                    await ctx.send(
-                        embed=ut.make_embed(
-                            name='Error:',
-                            value='Tracking got disabled!',
-                            color=ut.red
-                        )
-                    )
-                    return
-
-            match_crawler.update_tracking(puuid, True)
-            await ctx.send(
-                embed=ut.make_embed(
-                    name='Error:',
-                    value='Tracking got enabled!',
-                    color=ut.green
-                )
-            )
-            return
-
-        # add user to db in case you never enabled tracking before
-        else:
+            # add user to db in case you never enabled tracking before
             match_crawler.add_user(puuid, True)
             await ctx.send(
                 embed=ut.make_embed(
                     name='add_tracking:',
-                    value=f'You got added to the tracking list!',
+                    value=f'You enabled match tracking!',
                     color=ut.green
                 )
             )
             return
+
+        else:
+
+            # check if user is already tracked
+            if match_crawler.get_tracked_status(puuid):
+
+                # if player is getting tracked,
+                # disable tracking!
+                match_crawler.update_tracking(puuid, False)
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='disable_tracking:',
+                        value='You disabled match tracking!',
+                        color=ut.red
+                    )
+                )
+                return
+
+            else:
+                # if player is not tracked,
+                # enable tracking!
+                match_crawler.update_tracking(puuid, True)
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='enable_tracking:',
+                        value='You enabled match tracking!',
+                        color=ut.green
+                    )
+                )
+                return
+
     ####################################################################################################################
 
     # Task wich crawles the stats of the tracked players and updates the database

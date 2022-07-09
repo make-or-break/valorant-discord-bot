@@ -148,7 +148,6 @@
                     };
                   }))
 
-                requests
                 sqlalchemy
 
               ];

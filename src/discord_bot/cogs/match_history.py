@@ -126,7 +126,8 @@ class History(commands.Cog):
             await ctx.send(
                 embed=ut.make_embed(
                     name='Error:',
-                    value='You need to enable match tracking first!',
+                    value=f'You need to enable match tracking first! \n\
+                        Use `{PREFIX} track`',
                     color=ut.red
                 )
             )
@@ -136,7 +137,8 @@ class History(commands.Cog):
             await ctx.send(
                 embed=ut.make_embed(
                     name='Error:',
-                    value='You need to enable match tracking first!',
+                    value=f'You need to enable match tracking first! \n\
+                        Use `{PREFIX} track`',
                     color=ut.red
                 )
             )

@@ -40,8 +40,18 @@ class History(commands.Cog):
             )
             return
 
-        # get corresponding puuid from db
-        puuid = (db.get_player(ctx.author.id).puuid)
+        # tell user to enable connect the valorant account first
+        if not db.player_exists(ctx.author.id):
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='error:',
+                    value=f'You need to first connect your Valorant account to the bot! Use the command `{PREFIX}connect`',
+                    color=ut.red
+                )
+            )
+        else:
+            # get corresponding puuid from db
+            puuid = (db.get_player(ctx.author.id).puuid)
 
         # check if user allready exists in db
         if not match_crawler.user_exists(puuid):
@@ -98,8 +108,18 @@ class History(commands.Cog):
         send elo stats to user
         """
 
-        # get corresponding puuid from db
-        puuid = (db.get_player(ctx.author.id).puuid)
+        # tell user to enable connect the valorant account first
+        if not db.player_exists(ctx.author.id):
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='error:',
+                    value=f'You need to first connect your Valorant account to the bot! Use the command `{PREFIX}connect`',
+                    color=ut.red
+                )
+            )
+        else:
+            # get corresponding puuid from db
+            puuid = (db.get_player(ctx.author.id).puuid)
 
         if not match_crawler.user_exists(puuid):
             await ctx.send(

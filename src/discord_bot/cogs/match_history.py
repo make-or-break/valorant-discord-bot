@@ -101,34 +101,55 @@ class History(commands.Cog):
         # get corresponding puuid from db
         puuid = (db.get_player(ctx.author.id).puuid)
 
-        matches = match_crawler.matches_within_time(puuid, 1)
-        diff = match_crawler.get_elo_over_matches(puuid, matches)
+        if not match_crawler.user_exists(puuid):
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='Error:',
+                    value='You need to enable match tracking first!',
+                    color=ut.red
+                )
+            )
+            return
 
-        if diff > 0:
-            color = ut.green
-            diff = f'+{diff}'
+        elif not match_crawler.get_tracked_status(puuid):
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='Error:',
+                    value='You need to enable match tracking first!',
+                    color=ut.red
+                )
+            )
+            return
+
         else:
-            color = ut.red
-            diff = f'-{diff}'
+            matches = match_crawler.matches_within_time(puuid, 1)
+            diff = match_crawler.get_elo_over_matches(puuid, matches)
 
-        await ctx.send(
-            embed=ut.make_embed(
-                name='elo:',
-                value=f'last 24h:\n\
-                    elo: {diff}\n\
-                    matches: {matches}',
-                color=color
-            )
-        )
+            if diff > 0:
+                color = ut.green
+                diff = f'+{diff}'
+            else:
+                color = ut.red
+                diff = f'-{diff}'
 
-        await ctx.send(
-            embed=ut.make_embed(
-                name='history:',
-                value=f'{match_crawler.get_match_history(puuid,1)}',
-                color=ut.green
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='elo:',
+                    value=f'last 24h:\n\
+                        elo: {diff}\n\
+                        matches: {matches}',
+                    color=color
+                )
             )
-        )
-        return
+
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='history:',
+                    value=f'{match_crawler.get_match_history(puuid,1)}',
+                    color=ut.green
+                )
+            )
+            return
 
 
 async def setup(bot):

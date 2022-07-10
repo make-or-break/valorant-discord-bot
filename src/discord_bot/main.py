@@ -76,7 +76,8 @@ async def on_ready():
     initial_extensions = [
         '.cogs.onboarding',
         '.cogs.crawler',
-        '.cogs.help'
+        '.cogs.help',
+        '.cogs.match_history'
     ]
 
     for extension in initial_extensions:

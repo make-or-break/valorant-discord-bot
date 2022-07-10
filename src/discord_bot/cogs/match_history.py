@@ -127,7 +127,7 @@ class History(commands.Cog):
                 embed=ut.make_embed(
                     name='Error:',
                     value=f'You need to enable match tracking first! \n\
-                        Use `{PREFIX} track`',
+                        Use `{PREFIX}track`',
                     color=ut.red
                 )
             )
@@ -138,7 +138,7 @@ class History(commands.Cog):
                 embed=ut.make_embed(
                     name='Error:',
                     value=f'You need to enable match tracking first! \n\
-                        Use `{PREFIX} track`',
+                        Use `{PREFIX}track`',
                     color=ut.red
                 )
             )

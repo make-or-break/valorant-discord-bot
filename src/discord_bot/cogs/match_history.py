@@ -3,6 +3,7 @@ import match_crawler
 from discord.ext import commands
 from discord.ext import tasks
 
+from ..environment import PREFIX
 from ..log_setup import logger
 from ..utils import utils as ut
 from database import sql_statements as db

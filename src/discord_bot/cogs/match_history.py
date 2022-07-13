@@ -162,7 +162,7 @@ class History(commands.Cog):
                 embed=ut.make_embed(
                     name='elo:',
                     value=(
-                        f'last 24h:\n'
+                        f'{ctx.author.mention} within the last 24h:\n'
                         f'elo: {diff}\n'
                         f'matches: {matches}'
                     ),

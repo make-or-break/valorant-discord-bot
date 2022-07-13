@@ -161,9 +161,11 @@ class History(commands.Cog):
             await ctx.send(
                 embed=ut.make_embed(
                     name='elo:',
-                    value=f'last 24h:\n\
-                        elo: {diff}\n\
-                        matches: {matches}',
+                    value=(
+                        f'last 24h:\n'
+                        f'elo: {diff}\n'
+                        f'matches: {matches}'
+                    ),
                     color=color
                 )
             )

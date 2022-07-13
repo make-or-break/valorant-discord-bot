@@ -168,13 +168,6 @@ class History(commands.Cog):
                 )
             )
 
-            await ctx.send(
-                embed=ut.make_embed(
-                    name='history:',
-                    value=f'{match_crawler.get_match_history(puuid,1)}',
-                    color=ut.green
-                )
-            )
             return
 
 

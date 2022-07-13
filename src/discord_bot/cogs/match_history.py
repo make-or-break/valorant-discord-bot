@@ -151,6 +151,9 @@ class History(commands.Cog):
             if diff > 0:
                 color = ut.green
                 diff = f'+{diff}'
+            elif diff == 0:
+                color = ut.yellow
+                diff = f'+/-{diff}'
             else:
                 color = ut.red
                 diff = f'-{diff}'

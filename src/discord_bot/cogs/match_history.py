@@ -22,6 +22,7 @@ class History(commands.Cog):
     # for reference: https://github.com/make-or-break/valorant-match-history
     ####################################################################################################################
 
+    #TODO: obsolete when !settings is implemented
     @commands.command(name='track', aliases=['tracking'])
     async def track_command(self, ctx):
         """
@@ -103,6 +104,7 @@ class History(commands.Cog):
     # user needs to have tracking enabled
     ####################################################################################################################
 
+    #TODO: add option to get elo of other user (when he has public elo enabled)
     @commands.command(name='elo')
     async def elo_command(self, ctx):
         """

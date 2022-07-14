@@ -53,3 +53,38 @@ def player_exists(id, session=db.open_session()):
     Check if the player exists in the database
     """
     return session.query(db.Player).filter(db.Player.id == id).first() is not None
+
+
+def add_settings(id, public_elo=False, session=db.open_session()):
+    """
+    Add an entry to the settings database
+    """
+    entry = db.Settings(id=id, public_elo=public_elo)
+    print(
+        f'Add to settings db! id: {id} - public_elo: {public_elo}')
+    session.add(entry)
+    session.commit()
+
+
+def update_settings(id, public_elo, session=db.open_session()):
+    """
+    Update the settings in the database
+    """
+    session.query(db.Settings).filter(db.Settings.id == id).update({
+        'public_elo': public_elo
+    })
+    session.commit()
+
+
+def get_settings(id, session=db.open_session()):
+    """
+    Get the settings from the database
+    """
+    return session.query(db.Settings).filter(db.Settings.id == id).first()
+
+
+def settings_exists(id, session=db.open_session()):
+    """
+    Check if the settings exists in the database
+    """
+    return session.query(db.Settings).filter(db.Settings.id == id).first() is not None

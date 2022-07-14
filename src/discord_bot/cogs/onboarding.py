@@ -6,6 +6,7 @@ from discord.ext import commands
 from sqlalchemy import null
 
 import valorant
+from ..environment import PREFIX
 from ..log_setup import logger
 from ..utils import utils as ut
 from database import sql_statements as db
@@ -107,6 +108,42 @@ class ChangeAccountView(discord.ui.View):
         # Disable buttons
         for child in self.children:
             child.disabled=True
+        await interaction.response.edit_message(view=self)
+
+
+# Button View for changing settings
+class SettingsView(discord.ui.View):
+
+    public = False
+
+    def __init__(self, *, timeout=None, user, bot):
+        super().__init__(timeout=timeout)
+        self.user=user
+        self.bot=bot
+        self.settings=db.get_settings(id=self.user.id)
+        SettingsView.public = self.settings.elo_public
+
+    #TODO: move enable/disable tracking from match history cog to here
+    @discord.ui.button(label='Tracking: Off', style=discord.ButtonStyle.red)
+    async def tracking_button(self, interaction:discord.Interaction, child:discord.ui.Button):
+        pass
+
+    @discord.ui.button(label=f"Elo: {'public' if public else 'private'}", style=discord.ButtonStyle.green if public else discord.ButtonStyle.red)
+    async def elo_button(self, interaction:discord.Interaction, child:discord.ui.Button):
+        if self.settings.elo_public:
+            db.update_settings(id=self.user.id, elo_public=False)
+            child.label='Elo: private'
+            child.style=discord.ButtonStyle.red
+            self.settings = db.get_settings(id=self.user.id)
+            logger.info(f'elo_public set to: {self.settings.elo_public}')
+            
+        else:
+            db.update_settings(id=self.user.id, elo_public=True)
+            child.label='Elo: public'
+            child.style=discord.ButtonStyle.green
+            self.settings = db.get_settings(id=self.user.id)
+            logger.info(f'elo_public set to: {self.settings.elo_public}')
+            
         await interaction.response.edit_message(view=self)
 
 
@@ -296,6 +333,49 @@ class Onboarding(commands.Cog):
                     value=f'Welcome to the {member.guild.name} Server. I gave you your matching role: {role.name}',
                     color=ut.green
                 )
+            )
+
+
+    # Event listener, wich does an onboarding flow if a new user is joining.
+    @commands.command(name='settings', help='Change your settings.')
+    async def settings(self, ctx):
+        """!
+        Change your settings.
+        @param ctx Context of the message
+        """
+        # Send Error and break if command is not executed in private chat
+        if not ctx.channel.type == discord.ChannelType.private:
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='Error:',
+                    value='This command is only available in private chat. Please send me a DM :)',
+                    color=ut.red
+                )
+            )
+            return
+
+        # If player already exists in db add role on all his guilds managed by this bot, otherwise start the onboarding first
+        if not db.settings_exists(ctx.author.id):
+            if not db.player_exists(ctx.author.id):
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='Error:',
+                        value=f'You have to connect your Valorant account first. Please use the command `{PREFIX}connect`.',
+                        color=ut.red
+                    )
+                )
+                return
+            else:
+                db.add_settings(ctx.author.id)
+                logger.info(f'Settings created in db for {ctx.author.name}')
+        
+        await ctx.send(
+                embed=ut.make_embed(
+                    name='Settings:',
+                    value=f'Tracking: enable match tracking (necessary for the `{PREFIX}elo` command).\n Elo: allow others to use `{PREFIX}elo` to get your stats. (if private, only you can use it)\n\n Click the buttons to toggle the settings. (Button label is the current state)',
+                    color=ut.blue_light
+                ),
+                view=SettingsView(user=ctx.author, bot=self.bot)
             )
 
 

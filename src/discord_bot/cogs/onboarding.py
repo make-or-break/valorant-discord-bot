@@ -1,5 +1,6 @@
 import asyncio
 import re
+from time import sleep
 
 import discord
 from discord.ext import commands
@@ -114,35 +115,38 @@ class ChangeAccountView(discord.ui.View):
 # Button View for changing settings
 class SettingsView(discord.ui.View):
 
-    public = False
-
     def __init__(self, *, timeout=None, user, bot):
         super().__init__(timeout=timeout)
         self.user=user
         self.bot=bot
         self.settings=db.get_settings(id=self.user.id)
-        SettingsView.public = self.settings.elo_public
+        self.children[1].label = f"Elo: {'public' if self.settings.public_elo else 'private'}"
+        self.children[1].style = discord.ButtonStyle.green if self.settings.public_elo else discord.ButtonStyle.red
+
 
     #TODO: move enable/disable tracking from match history cog to here
-    @discord.ui.button(label='Tracking: Off', style=discord.ButtonStyle.red)
+    @discord.ui.button(label='Tracking', style=discord.ButtonStyle.grey)
     async def tracking_button(self, interaction:discord.Interaction, child:discord.ui.Button):
         pass
 
-    @discord.ui.button(label=f"Elo: {'public' if public else 'private'}", style=discord.ButtonStyle.green if public else discord.ButtonStyle.red)
+    @discord.ui.button(label='Elo', style=discord.ButtonStyle.grey)
     async def elo_button(self, interaction:discord.Interaction, child:discord.ui.Button):
-        if self.settings.elo_public:
-            db.update_settings(id=self.user.id, elo_public=False)
+        logger.info(f"public_elo is {self.settings.public_elo}")
+        if self.settings.public_elo:
+            db.update_settings(id=self.user.id, public_elo=False)
+            logger.info(f"trying to set public_elo in db to False")
             child.label='Elo: private'
             child.style=discord.ButtonStyle.red
             self.settings = db.get_settings(id=self.user.id)
-            logger.info(f'elo_public set to: {self.settings.elo_public}')
+            logger.info(f'public_elo in db set to: {self.settings.public_elo}')
             
         else:
-            db.update_settings(id=self.user.id, elo_public=True)
+            db.update_settings(id=self.user.id, public_elo=True)
+            logger.info(f"trying to set public_elo in db to True")
             child.label='Elo: public'
             child.style=discord.ButtonStyle.green
             self.settings = db.get_settings(id=self.user.id)
-            logger.info(f'elo_public set to: {self.settings.elo_public}')
+            logger.info(f'public_elo in db set to: {self.settings.public_elo}')
             
         await interaction.response.edit_message(view=self)
 
@@ -168,7 +172,9 @@ class Onboarding(commands.Cog):
     async def add_db_entry(self, user, player):
         player_json = valorant.get_player_json(player[0], player[1])
         db.add_player(id=user.id, elo=valorant.get_elo(player_json), rank=valorant.RANK_VALUE[valorant.get_rank_tier(player_json)]['name'], rank_tier=valorant.get_rank_tier(player_json), username=player[0], tagline=player[1], puuid=valorant.get_puuid(player_json))
-        logger.info(f'Added player {player[0]}#{player[1]} to database.')
+        db.add_settings(id=user.id)
+        logger.info(f'Added player {player[0]}#{player[1]} to player table.')
+        logger.info(f'Added {user.name} to settings table.')
 
 
     async def add_role(self, member, rank_tier):
@@ -370,13 +376,13 @@ class Onboarding(commands.Cog):
                 logger.info(f'Settings created in db for {ctx.author.name}')
         
         await ctx.send(
-                embed=ut.make_embed(
-                    name='Settings:',
-                    value=f'Tracking: enable match tracking (necessary for the `{PREFIX}elo` command).\n Elo: allow others to use `{PREFIX}elo` to get your stats. (if private, only you can use it)\n\n Click the buttons to toggle the settings. (Button label is the current state)',
-                    color=ut.blue_light
-                ),
-                view=SettingsView(user=ctx.author, bot=self.bot)
-            )
+            embed=ut.make_embed(
+                name='Settings:',
+                value=f'Tracking: enable match tracking (necessary for the `{PREFIX}elo` command).\n Elo: allow others to use `{PREFIX}elo` to get your stats. (if private, only you can use it)\n\n Click the buttons to toggle the settings. (Button label is the current state)',
+                color=ut.blue_light
+            ),
+            view=SettingsView(user=ctx.author, bot=self.bot)
+        )
 
 
 async def validate_name(self, user, message_list=[]):

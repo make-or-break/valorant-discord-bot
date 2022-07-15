@@ -131,24 +131,12 @@ class SettingsView(discord.ui.View):
 
     @discord.ui.button(label='Elo', style=discord.ButtonStyle.grey)
     async def elo_button(self, interaction:discord.Interaction, child:discord.ui.Button):
-        logger.info(f"public_elo is {self.settings.public_elo}")
-        if self.settings.public_elo:
-            db.update_settings(id=self.user.id, public_elo=False)
-            logger.info(f"trying to set public_elo in db to False")
-            child.label='Elo: private'
-            child.style=discord.ButtonStyle.red
-            self.settings = db.get_settings(id=self.user.id)
-            logger.info(f'public_elo in db set to: {self.settings.public_elo}')
-            
-        else:
-            db.update_settings(id=self.user.id, public_elo=True)
-            logger.info(f"trying to set public_elo in db to True")
-            child.label='Elo: public'
-            child.style=discord.ButtonStyle.green
-            self.settings = db.get_settings(id=self.user.id)
-            logger.info(f'public_elo in db set to: {self.settings.public_elo}')
-            
+        self.settings.public_elo = not self.settings.public_elo
+        child.label = f"Elo: {'public' if self.settings.public_elo else 'private'}"
+        child.style = discord.ButtonStyle.green if self.settings.public_elo else discord.ButtonStyle.red
         await interaction.response.edit_message(view=self)
+        db.update_settings(id=self.user.id, public_elo=self.settings.public_elo)
+        logger.info(f"public_elo changed to {self.settings.public_elo}!")
 
 
 #TODO: add admin commands: remove player from db, add player to db by admin.

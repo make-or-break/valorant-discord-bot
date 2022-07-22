@@ -2,9 +2,9 @@
 import os
 
 import discord
+import valorant
 from discord.ext import commands
 
-import valorant
 from .create import roles as create_roles
 from .environment import ACTIVITY_NAME
 from .environment import PREFIX

@@ -3,10 +3,10 @@ import re
 from time import sleep
 
 import discord
+import valorant
 from discord.ext import commands
 from sqlalchemy import null
 
-import valorant
 from ..environment import PREFIX
 from ..log_setup import logger
 from ..utils import utils as ut
@@ -136,7 +136,7 @@ class SettingsView(discord.ui.View):
         child.style = discord.ButtonStyle.green if self.settings.public_elo else discord.ButtonStyle.red
         await interaction.response.edit_message(view=self)
         db.update_settings(id=self.user.id, public_elo=self.settings.public_elo)
-        logger.info(f"public_elo changed to {self.settings.public_elo}!")
+        logger.info(f'public_elo changed to {self.settings.public_elo}!')
 
 
 #TODO: add admin commands: remove player from db, add player to db by admin.
@@ -362,7 +362,7 @@ class Onboarding(commands.Cog):
             else:
                 db.add_settings(ctx.author.id)
                 logger.info(f'Settings created in db for {ctx.author.name}')
-        
+
         await ctx.send(
             embed=ut.make_embed(
                 name='Settings:',

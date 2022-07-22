@@ -1,6 +1,5 @@
 import asyncio
 import re
-from time import sleep
 
 import discord
 import valorant

@@ -1,6 +1,5 @@
 import os
 import sys
-from email.policy import default
 
 import sqlalchemy
 from sqlalchemy import Boolean

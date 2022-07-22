@@ -2,6 +2,7 @@ import os
 import sys
 
 import sqlalchemy
+from sqlalchemy import Boolean
 from sqlalchemy import Column
 from sqlalchemy import create_engine
 from sqlalchemy import event
@@ -31,6 +32,14 @@ try:
 
         def __repr__(self):
             return f"id='{self.id}', username='{self.username}', tagline='{self.tagline}', elo='{self.elo}', rank='{self.rank}', rank_tier='{self.rank_tier}'"
+
+    class Settings(Base):
+        __tablename__ = 'settings'
+        id = Column(Integer, primary_key=True)
+        public_elo = Column(Boolean)
+
+        def __repr__(self):
+            return f"id='{self.id}', public_elo='{self.public_elo}'"
 
     Base.metadata.create_all(engine)
 

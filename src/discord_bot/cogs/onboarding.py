@@ -2,10 +2,11 @@ import asyncio
 import re
 
 import discord
+import valorant
 from discord.ext import commands
 from sqlalchemy import null
 
-import valorant
+from ..environment import PREFIX
 from ..log_setup import logger
 from ..utils import utils as ut
 from database import sql_statements as db
@@ -110,6 +111,33 @@ class ChangeAccountView(discord.ui.View):
         await interaction.response.edit_message(view=self)
 
 
+# Button View for changing settings
+class SettingsView(discord.ui.View):
+
+    def __init__(self, *, timeout=None, user, bot):
+        super().__init__(timeout=timeout)
+        self.user=user
+        self.bot=bot
+        self.settings=db.get_settings(id=self.user.id)
+        self.children[1].label = f"Elo: {'public' if self.settings.public_elo else 'private'}"
+        self.children[1].style = discord.ButtonStyle.green if self.settings.public_elo else discord.ButtonStyle.red
+
+
+    #TODO: move enable/disable tracking from match history cog to here
+    @discord.ui.button(label='Tracking', style=discord.ButtonStyle.grey)
+    async def tracking_button(self, interaction:discord.Interaction, child:discord.ui.Button):
+        pass
+
+    @discord.ui.button(label='Elo', style=discord.ButtonStyle.grey)
+    async def elo_button(self, interaction:discord.Interaction, child:discord.ui.Button):
+        self.settings.public_elo = not self.settings.public_elo
+        child.label = f"Elo: {'public' if self.settings.public_elo else 'private'}"
+        child.style = discord.ButtonStyle.green if self.settings.public_elo else discord.ButtonStyle.red
+        await interaction.response.edit_message(view=self)
+        db.update_settings(id=self.user.id, public_elo=self.settings.public_elo)
+        logger.info(f'public_elo changed to {self.settings.public_elo}!')
+
+
 #TODO: add admin commands: remove player from db, add player to db by admin.
 
 ### @package onboarding
@@ -131,7 +159,9 @@ class Onboarding(commands.Cog):
     async def add_db_entry(self, user, player):
         player_json = valorant.get_player_json(player[0], player[1])
         db.add_player(id=user.id, elo=valorant.get_elo(player_json), rank=valorant.RANK_VALUE[valorant.get_rank_tier(player_json)]['name'], rank_tier=valorant.get_rank_tier(player_json), username=player[0], tagline=player[1], puuid=valorant.get_puuid(player_json))
-        logger.info(f'Added player {player[0]}#{player[1]} to database.')
+        db.add_settings(id=user.id)
+        logger.info(f'Added player {player[0]}#{player[1]} to player table.')
+        logger.info(f'Added {user.name} to settings table.')
 
 
     async def add_role(self, member, rank_tier):
@@ -297,6 +327,49 @@ class Onboarding(commands.Cog):
                     color=ut.green
                 )
             )
+
+
+    # Event listener, wich does an onboarding flow if a new user is joining.
+    @commands.command(name='settings', help='Change your settings.')
+    async def settings(self, ctx):
+        """!
+        Change your settings.
+        @param ctx Context of the message
+        """
+        # Send Error and break if command is not executed in private chat
+        if not ctx.channel.type == discord.ChannelType.private:
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='Error:',
+                    value='This command is only available in private chat. Please send me a DM :)',
+                    color=ut.red
+                )
+            )
+            return
+
+        # If player already exists in db add role on all his guilds managed by this bot, otherwise start the onboarding first
+        if not db.settings_exists(ctx.author.id):
+            if not db.player_exists(ctx.author.id):
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='Error:',
+                        value=f'You have to connect your Valorant account first. Please use the command `{PREFIX}connect`.',
+                        color=ut.red
+                    )
+                )
+                return
+            else:
+                db.add_settings(ctx.author.id)
+                logger.info(f'Settings created in db for {ctx.author.name}')
+
+        await ctx.send(
+            embed=ut.make_embed(
+                name='Settings:',
+                value=f'Tracking: enable match tracking (necessary for the `{PREFIX}elo` command).\n Elo: allow others to use `{PREFIX}elo` to get your stats. (if private, only you can use it)\n\n Click the buttons to toggle the settings. (Button label is the current state)',
+                color=ut.blue_light
+            ),
+            view=SettingsView(user=ctx.author, bot=self.bot)
+        )
 
 
 async def validate_name(self, user, message_list=[]):

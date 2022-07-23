@@ -4,10 +4,10 @@ from discord.ext import commands
 from ..environment import OWNER_ID
 from ..environment import OWNER_NAME
 from ..environment import PREFIX
-from ..environment import VERSION
 from ..utils import utils as utl
+from discord_bot import __version__ as __version__
 
-### @package help
+# @package help
 #
 # This custom help command is a replacement for the default one on any Discord Bot written in discord.py!
 # However, you must put "bot.remove_command('help')" in your bot, and the command must be in a cog for it to work.
@@ -77,14 +77,15 @@ class Help(commands.Cog):
 
             # adding those commands to embed
             if commands_desc:
-                emb.add_field(name='Not belonging to a module', value=commands_desc, inline=False)
+                emb.add_field(name='Not belonging to a module',
+                              value=commands_desc, inline=False)
 
             # setting information about author
             emb.add_field(name='About',
                           value=f'This bot is maintained by {owner}.\n\
                                 Please visit https://github.com/make-or-break/valorant-discord-bot to submit ideas or bugs.\n\
                                 Based on a template by nonchris: https://github.com/nonchris/discord-bot.\n')
-            emb.set_footer(text=f'Bot is running Version: {VERSION}')
+            emb.set_footer(text=f'Bot is running Version: {__version__}')
 
         # block called when one cog-name is given
         # trying to find matching cog and it's commands
@@ -103,7 +104,8 @@ class Help(commands.Cog):
                     for command in self.bot.get_cog(cog).get_commands():
                         # if cog is not hidden
                         if not command.hidden:
-                            emb.add_field(name=f'{PREFIX}{command.name}', value=command.help, inline=False)
+                            emb.add_field(
+                                name=f'{PREFIX}{command.name}', value=command.help, inline=False)
                     # found cog - breaking loop
                     break
 

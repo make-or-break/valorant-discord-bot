@@ -1,4 +1,5 @@
 import pathlib
+import re
 from importlib.metadata import entry_points
 
 from setuptools import find_packages
@@ -9,9 +10,13 @@ here = pathlib.Path(__file__).parent.resolve()
 # Get the long description from the README file
 long_description = (here / 'README.md').read_text(encoding='utf-8')
 
+with open('src/discord_bot/__init__.py') as f:
+    version = re.search(
+        r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
+
 setup(
     name='valorant-discord-bot',
-    version='0.2.0',
+    version=version,
     description='A discord bot for valorant communities',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -40,5 +45,6 @@ setup(
     install_requires=['sqlalchemy ~= 1.4.37'],
     package_dir={'': 'src/'},
     packages=find_packages(where='src/'),
-    entry_points={'console_scripts': ['valorant-discord-bot=discord_bot:main']},
+    entry_points={'console_scripts': [
+        'valorant-discord-bot=discord_bot:main']},
 )

@@ -1,3 +1,11 @@
+"""
+Valorant discord bot
+~~~~~~~~~~~~~~~~~~~
+Discord bot that can be used to control valorant communities.
+"""
+
+__version__ = '0.2.0'
+
 import asyncio
 
 import valorant

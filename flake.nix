@@ -4,6 +4,12 @@
   inputs = {
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    custom-nixpkgs = {
+      url = "github:make-or-break/nixpkgs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     flake-utils.url = "github:numtide/flake-utils";
 
     valorant-utils = {
@@ -134,21 +140,8 @@
                 self.inputs.valorant-utils.packages.${system}.valorant-utils
                 self.inputs.valorant-match-history.packages.${system}.valorant-match-history
 
-                # we want to use discordpy 2.0.0a
-                # but it's not available in nixpkgs yet (it's still in alpha)
-                # discord.py uses a newer API version with new features
-                # the older API version will stop working in the future
-                (discordpy.overrideAttrs
-                  (old: rec {
-                    pname = "discord.py";
-                    version = "2.0.0a";
-                    src = pkgs.fetchFromGitHub {
-                      owner = "Rapptz";
-                      repo = pname;
-                      rev = "55849d996e65613a334d73adbfc43bbe7b77d31a";
-                      sha256 = "sha256-7s+wIIaih0CtXCzD4nAfSxvebZuEbYIo5LMH6RZgX9A=";
-                    };
-                  }))
+                # discordpy 2.0.0a
+                self.inputs.custom-nixpkgs.packages.${system}.discordpy
 
                 sqlalchemy
 

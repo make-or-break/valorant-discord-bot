@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "custom-nixpkgs": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1658565356,
+        "narHash": "sha256-YQHqpi1NLo5Q5VpPp90UOFlIy9xt/52kg7Yin6gSm9Y=",
+        "owner": "make-or-break",
+        "repo": "nixpkgs",
+        "rev": "0ac5a383f4c1f570d678dcf4963627a58d415c02",
+        "type": "github"
+      },
+      "original": {
+        "owner": "make-or-break",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1656928814,
@@ -33,6 +53,7 @@
     },
     "root": {
       "inputs": {
+        "custom-nixpkgs": "custom-nixpkgs",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
         "valorant-match-history": "valorant-match-history",

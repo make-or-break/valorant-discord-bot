@@ -36,7 +36,8 @@ class Crawler(commands.Cog):
 
             # check if response is valid
             if valorant.get_rank_tier(player_json) == 0:
-                logger.info(f'API request for {player.username} failed')
+                if player.rank_tier != 0:
+                    logger.info(f'API request for {player.username} failed')
 
             else:
                 rank_tier_new = valorant.get_rank_tier(player_json)

@@ -22,7 +22,7 @@ class History(commands.Cog):
     # for reference: https://github.com/make-or-break/valorant-match-history
     ####################################################################################################################
 
-    #TODO: obsolete when !settings is implemented
+    # TODO: obsolete when !settings is implemented
     @commands.command(name='track', aliases=['tracking'])
     async def track_command(self, ctx):
         """
@@ -104,7 +104,7 @@ class History(commands.Cog):
     # user needs to have tracking enabled
     ####################################################################################################################
 
-    #TODO: add option to get elo of other user (when he has public elo enabled)
+    # TODO: add option to get elo of other user (when he has public elo enabled)
     @commands.command(name='elo')
     async def elo_command(self, ctx):
         """
@@ -123,6 +123,7 @@ class History(commands.Cog):
         else:
             # get corresponding puuid from db
             puuid = (db.get_player(ctx.author.id).puuid)
+            elo = (db.get_player(ctx.author.id).elo)
 
         if not match_crawler.user_exists(puuid):
             await ctx.send(
@@ -165,8 +166,9 @@ class History(commands.Cog):
                     name='elo:',
                     value=(
                         f'{ctx.author.mention} within the last 24h:\n'
-                        f'elo: {diff}\n'
-                        f'matches: {matches}'
+                        f'diff: {diff}\n'
+                        f'matches: {matches}\n'
+                        f'elo: {elo}'
                     ),
                     color=color
                 )

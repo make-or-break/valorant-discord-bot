@@ -123,7 +123,17 @@ class History(commands.Cog):
         else:
             # get corresponding puuid from db
             puuid = (db.get_player(ctx.author.id).puuid)
-            elo = (db.get_player(ctx.author.id).elo)
+
+            # only continue if user has elo value
+            if (elo := db.get_player(ctx.author.id).elo) is None:
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='error:',
+                        value=f'You have no elo stats yet!',
+                        color=ut.red
+                    )
+                )
+                return
 
         if not match_crawler.user_exists(puuid):
             await ctx.send(

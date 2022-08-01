@@ -158,7 +158,7 @@ class History(commands.Cog):
                 diff = f'+/-{diff}'
             else:
                 color = ut.red
-                diff = f'-{diff}'
+                diff = f'{diff}'
 
             await ctx.send(
                 embed=ut.make_embed(

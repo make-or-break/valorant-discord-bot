@@ -1,5 +1,6 @@
 import discord
 import match_crawler
+import valorant
 from discord.ext import commands
 from discord.ext import tasks
 
@@ -135,6 +136,14 @@ class History(commands.Cog):
                 )
                 return
 
+            rank = valorant.RANK_VALUE[(
+                db.get_player(ctx.author.id).rank_tier)]['name']
+            next_rank = valorant.RANK_VALUE[(
+                db.get_player(ctx.author.id).rank_tier)+1]['name']
+
+            # mod 100
+            elo_needed = 100-(int(elo) % 100)
+
         if not match_crawler.user_exists(puuid):
             await ctx.send(
                 embed=ut.make_embed(
@@ -178,7 +187,8 @@ class History(commands.Cog):
                         f'{ctx.author.mention} within the last 24h:\n'
                         f'diff: {diff}\n'
                         f'matches: {matches}\n'
-                        f'elo: {elo}'
+                        f'rank: {rank} ({elo} elo)\n'
+                        f'next rank: {next_rank} ({elo_needed} elo needed)'
                     ),
                     color=color
                 )

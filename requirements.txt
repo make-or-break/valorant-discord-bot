@@ -5,4 +5,4 @@ requests ~= 2.28.0
 setuptools ~= 60.2.0
 sqlalchemy ~= 1.4.37
 valorant-match-history @ git+https://github.com/make-or-break/valorant-match-history#2240c68
-valorant-utils @ git+https://github.com/make-or-break/valorant-utils#926559f
+valorant-utils @ git+https://github.com/make-or-break/valorant-utils#f2e7117

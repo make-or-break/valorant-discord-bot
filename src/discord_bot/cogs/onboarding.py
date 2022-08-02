@@ -306,6 +306,15 @@ class Onboarding(commands.Cog):
 
             logger.info(f'Onboarding DM sent to {member.name}, waiting for response.')
 
+            # give user the role unregistered
+            try:
+                role = discord.utils.get(member.guild.roles, name='unregistered')
+                await member.add_roles(role)
+
+            except Exception as ex:
+                logger.info(f'Something went wrong: {ex.message}')
+                return
+
             response = await validate_name(self, user=member, message_list=message_list)
 
             player = response.content.split('#')

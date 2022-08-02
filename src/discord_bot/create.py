@@ -36,6 +36,16 @@ async def roles(guild) -> None:
             logger.info(
                 f"Role '{role_name}' has been created on {guild.name} - {guild.id}")
 
+    # this role is being used to give the user access to a info channel
+    # it is not being used in the current version
+    # info channel explains how to use the bot
+    role_name = 'unregistered'
+    role = discord.utils.get(guild.roles, name=role_name)
+    if not role:
+        await guild.create_role(name=role_name, color=discord.Color.from_rgb(225, 255, 255), hoist=True)
+        logger.info(
+            f"Role '{role_name}' has been created on {guild.name} - {guild.id}")
+
 
 # this function is not being used in the current version
 # could be useful in the future

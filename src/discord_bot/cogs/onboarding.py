@@ -235,6 +235,20 @@ class Onboarding(commands.Cog):
                     )
                 )
 
+                # remove role unregistered
+                try:
+                    role = discord.utils.get(ctx.member.guild.roles, name='unregistered')
+                    if role in cxt.member.roles:
+                        try:
+                            await ctx.member.remove_roles(role)
+                            logger.info(f'Removed role unregistered from {ctx.member.name}')
+                        except Exception as ex:
+                            logger.info(f'Something went wrong: {ex.message}')
+                            return
+                except Exception as ex:
+                    logger.info(f'Something went wrong: {ex.message}')
+                    return
+
             # Valorant name in params
             else:
                 if not (re.fullmatch(re.compile(r'\b(.{3,16}#.{3,5})\b'), params[0])):
@@ -263,6 +277,20 @@ class Onboarding(commands.Cog):
                         color=ut.green
                     )
                 )
+
+                # remove role unregistered
+                try:
+                    role = discord.utils.get(ctx.member.guild.roles, name='unregistered')
+                    if role in cxt.member.roles:
+                        try:
+                            await ctx.member.remove_roles(role)
+                            logger.info(f'Removed role unregistered from {ctx.member.name}')
+                        except Exception as ex:
+                            logger.info(f'Something went wrong: {ex.message}')
+                            return
+                except Exception as ex:
+                    logger.info(f'Something went wrong: {ex.message}')
+                    return
 
         # Player already in db
         else:
@@ -327,6 +355,21 @@ class Onboarding(commands.Cog):
                     color=ut.green
                 )
             )
+
+            # remove role unregistered
+            try:
+                role = discord.utils.get(member.guild.roles, name='unregistered')
+                if role in member.roles:
+                    try:
+                        await member.remove_roles(role)
+                        logger.info(f'Removed role unregistered from {member.name}')
+                    except Exception as ex:
+                        logger.info(f'Something went wrong: {ex.message}')
+                        return
+            except Exception as ex:
+                logger.info(f'Something went wrong: {ex.message}')
+                return
+
         else:
             role = await self.add_role(member=member, rank_tier=db.get_player(member.id).rank_tier)
             await member.send(

@@ -8,6 +8,7 @@ from sqlalchemy import null
 
 from ..environment import PREFIX
 from ..log_setup import logger
+from ..unregistered import give_unregistered_role, remove_unregistered_role
 from ..utils import utils as ut
 from database import sql_statements as db
 
@@ -335,13 +336,7 @@ class Onboarding(commands.Cog):
             logger.info(f'Onboarding DM sent to {member.name}, waiting for response.')
 
             # give user the role unregistered
-            try:
-                role = discord.utils.get(member.guild.roles, name='unregistered')
-                await member.add_roles(role)
-
-            except Exception as ex:
-                logger.info(f'Something went wrong: {ex.message}')
-                return
+            await give_unregistered_role(member)
 
             response = await validate_name(self, user=member, message_list=message_list)
 

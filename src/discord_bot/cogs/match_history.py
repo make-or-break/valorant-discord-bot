@@ -167,7 +167,8 @@ class History(commands.Cog):
             return
 
         else:
-            matches = match_crawler.matches_within_time(puuid, 1)
+            days = 7
+            matches = match_crawler.matches_within_time(puuid, days)
             diff = match_crawler.get_elo_over_matches(puuid, matches)
 
             if diff > 0:
@@ -184,11 +185,11 @@ class History(commands.Cog):
                 embed=ut.make_embed(
                     name='elo:',
                     value=(
-                        f'{ctx.author.mention} within the last 24h:\n'
-                        f'diff: {diff}\n'
+                        f'{ctx.author.mention} within the last {days} days:\n'
+                        f'diff: {diff} RR\n'
                         f'matches: {matches}\n'
-                        f'rank: {rank} ({elo} elo)\n'
-                        f'next rank: {next_rank} ({elo_needed} elo needed)'
+                        f'rank: {rank} ({elo} RR)\n'
+                        f'next rank: {next_rank} ({elo_needed} RR needed)'
                     ),
                     color=color
                 )

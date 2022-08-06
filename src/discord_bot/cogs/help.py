@@ -85,7 +85,9 @@ class Help(commands.Cog):
                           value=f'This bot is maintained by {owner}.\n\
                                 Please visit https://github.com/make-or-break/valorant-discord-bot to submit ideas or bugs.\n\
                                 Based on a template by nonchris: https://github.com/nonchris/discord-bot.\n')
-            emb.set_footer(text=f'Bot is running Version: {__version__}')
+            emb.set_footer(
+                text=f'Bot is running Version: {__version__} using discord.py {discord.__version__}.'
+            )
 
         # block called when one cog-name is given
         # trying to find matching cog and it's commands

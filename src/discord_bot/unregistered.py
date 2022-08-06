@@ -44,6 +44,7 @@ async def give_unregistered_role(member) -> None:
 
 
 # not functional yet
+# needs to receive the guild as well
 async def remove_unregistered_role(member) -> None:
     """
     function makes sure user has NOT unregistered guild role.

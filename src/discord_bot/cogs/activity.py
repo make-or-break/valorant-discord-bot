@@ -36,6 +36,22 @@ class Activity(commands.Cog):
             f"{before.activities} ->\n"
             f"{after.activities}")
 
+        # do some "set-magic" to find out what happened
+        before_set, after_set = set(before.activities), set(after.activities)
+
+        # activities that stayed the same
+        unchanged = before_set.intersection(after_set)
+
+        # activities that were started or stopped
+        gone_activities = before_set.difference(unchanged)
+        new_activities = after_set.difference(unchanged)
+
+        if gone_activities:
+            logger.info(f"Stopped activities: '{gone_activities}'")
+
+        if new_activities:
+            logger.info(f"New activities: '{new_activities}'")
+
 
 async def setup(bot):
     await bot.add_cog(Activity(bot))

@@ -1,5 +1,8 @@
 import asyncio
+
+import discord
 from discord.ext import commands
+
 from ..log_setup import logger
 
 
@@ -11,9 +14,9 @@ class Activity(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
 
-    # Event listener
+    # Listener for presence updates
     @commands.Cog.listener()
-    async def on_member_update(self, before, after):
+    async def on_presence_update(self, before: discord.Member, after: discord.Member):
         """
         Check if a user has changed their activity.
         Idea: If someone starts playing a game, use that information to tell their friends.

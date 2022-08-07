@@ -78,6 +78,7 @@ async def on_ready():
         '.cogs.crawler',
         '.cogs.help',
         '.cogs.match_history'
+        # '.cogs.activity'
     ]
 
     for extension in initial_extensions:

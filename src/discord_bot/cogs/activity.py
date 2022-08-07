@@ -23,7 +23,18 @@ class Activity(commands.Cog):
         Important: Feature has to be opt in!
         """
         # simple test to check if we get the needed information
-        logger.info(f'{after.Game.name}')
+
+        # TODO: Add opt-in
+
+        # catch case that only members' status (online, offline, ...) changed
+        if before.activities == after.activities:
+            logger.debug(f"Status of '{after.name}#{after.discriminator}' ({after.id}) changed, no activity change")
+            return
+
+        logger.info(
+            f"Activity of '{after.name}#{after.discriminator}' ({after.id}) changed:\n"
+            f"{before.activities} ->\n"
+            f"{after.activities}")
 
 
 async def setup(bot):

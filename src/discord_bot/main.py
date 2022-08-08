@@ -1,5 +1,6 @@
 #!/bin/env python
 import os
+from database import sql_statements as db
 
 import discord
 import valorant
@@ -65,6 +66,9 @@ async def on_ready():
 
     logger.info(f"Bot '{bot.user.name}' has connected, active on {len(bot.guilds)} guilds:\n{guild_string}")
 
+    for player in db.get_all_players():
+        logger.info(f'member {player.username}#{player.tagline} ({player.rank}) is using the bot')
+
     await bot.change_presence(
         activity=discord.Activity(type=discord.ActivityType.watching, name=ACTIVITY_NAME))
 
@@ -85,7 +89,6 @@ async def on_ready():
         logger.info(f'Trying to load {extension} from {__package__}!')
         await bot.load_extension(extension, package=__package__)
         logger.info(f'Extention {extension} loaded!')
-
 
 async def start_bot(token=None):
     async with bot:

@@ -28,13 +28,13 @@ class Activity(commands.Cog):
 
         # catch case that only members' status (online, offline, ...) changed
         if before.activities == after.activities:
-            logger.debug(f"Status of '{after.name}#{after.discriminator}' ({after.id}) changed, no activity change")
+            # logger.debug(f"Status of '{after.name}#{after.discriminator}' ({after.id}) changed, no activity change")
             return
 
-        logger.info(
-            f"Activity of '{after.name}#{after.discriminator}' ({after.id}) changed:\n"
-            f"{before.activities} ->\n"
-            f"{after.activities}")
+        # logger.info(
+        #     f"Activity of '{after.name}#{after.discriminator}' ({after.id}) changed:\n"
+        #     f"{before.activities} ->\n"
+        #     f"{after.activities}")
 
         # do some "set-magic" to find out what happened
         before_set, after_set = set(before.activities), set(after.activities)
@@ -46,11 +46,14 @@ class Activity(commands.Cog):
         gone_activities = before_set.difference(unchanged)
         new_activities = after_set.difference(unchanged)
 
-        if gone_activities:
-            logger.info(f"Stopped activities: '{gone_activities}'")
+        # if gone_activities:
+        #     logger.info(f"'{after.name}#{after.discriminator}' stopped activities: '{gone_activities}'")
 
         if new_activities:
-            logger.info(f"New activities: '{new_activities}'")
+            for activity in new_activities:
+                if ((activity.type == discord.ActivityType.playing) and (activity.application_id==700136079562375258)):
+                    logger.info(f"'{after.name}#{after.discriminator}' started playing 'Valorant'")
+                    return
 
 
 async def setup(bot):

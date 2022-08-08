@@ -118,12 +118,31 @@
     //
 
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = nixpkgs.legacyPackages.${system};
+      let
+        pkgs = nixpkgs.legacyPackages.${system};
+
+        my-python = pkgs.python310;
+        my-python-with-my-packages = my-python.withPackages (p: with p; [
+          pycodestyle
+          self.inputs.custom-nixpkgs.packages.${system}.discordpy
+          self.inputs.valorant-match-history.packages.${system}.valorant-match-history
+          self.inputs.valorant-utils.packages.${system}.valorant-utils
+          sqlalchemy
+        ]);
+
       in
       rec {
 
         # Use nixpkgs-fmt for `nix fmt'
         formatter = pkgs.nixpkgs-fmt;
+
+        # nix develop 
+        devShell = pkgs.mkShell {
+          buildInputs = with pkgs; [
+            pre-commit
+            my-python-with-my-packages
+          ];
+        };
 
         defaultPackage = packages.valorant-discord-bot;
         packages = flake-utils.lib.flattenTree rec {
@@ -180,7 +199,6 @@
           };
 
         };
-
 
       });
 }

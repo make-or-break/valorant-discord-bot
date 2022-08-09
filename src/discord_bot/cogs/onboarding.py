@@ -8,7 +8,8 @@ from sqlalchemy import null
 
 from ..environment import PREFIX
 from ..log_setup import logger
-from ..unregistered import give_unregistered_role, remove_unregistered_role
+from ..unregistered import give_unregistered_role
+from ..unregistered import remove_unregistered_role
 from ..utils import utils as ut
 from database import sql_statements as db
 

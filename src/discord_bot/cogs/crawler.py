@@ -34,10 +34,11 @@ class Crawler(commands.Cog):
             # logger.info(f'Crawling {player.username}...')
             player_json = valorant.get_player_json_by_puuid(player.puuid)
 
-            if player_json is None:
+            if player_json is False:
                 logger.info(f'API request for {player.username} failed')
-            
+
             else:
+
                 # check if response is valid
                 if valorant.get_rank_tier(player_json) == 0:
                     if player.rank_tier != 0:

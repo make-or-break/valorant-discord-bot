@@ -31,7 +31,7 @@ try:
         username = Column(String)
 
         def __repr__(self):
-            return f"id='{self.id}', username='{self.username}', tagline='{self.tagline}', elo='{self.elo}', rank='{self.rank}', rank_tier='{self.rank_tier}'"
+            return f"id='{self.id}', username='{self.username}', tagline='{self.tagline}', elo='{self.elo}', rank='{self.rank}', rank_tier='{self.rank_tier}, puuid='{self.puuid}'"
 
     class Settings(Base):
         __tablename__ = 'settings'

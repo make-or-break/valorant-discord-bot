@@ -136,7 +136,7 @@
         # Use nixpkgs-fmt for `nix fmt'
         formatter = pkgs.nixpkgs-fmt;
 
-        # nix develop 
+        # nix develop
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
             pre-commit

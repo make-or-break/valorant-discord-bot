@@ -125,11 +125,8 @@ class History(commands.Cog):
             # get corresponding player from db
             player = db.get_player(ctx.author.id)
 
-            # get corresponding puuid from db
-            puuid = (db.get_player(ctx.author.id).puuid)
-
             # only continue if user has elo value
-            if (elo := db.get_player(ctx.author.id).elo) is None:
+            if (elo := player.elo) is None:
                 await ctx.send(
                     embed=ut.make_embed(
                         name='error:',
@@ -139,15 +136,13 @@ class History(commands.Cog):
                 )
                 return
 
-            rank = valorant.RANK_VALUE[(
-                db.get_player(ctx.author.id).rank_tier)]['name']
-            next_rank = valorant.RANK_VALUE[(
-                db.get_player(ctx.author.id).rank_tier)+1]['name']
+            rank = valorant.RANK_VALUE[(player.rank_tier)]['name']
+            next_rank = valorant.RANK_VALUE[(player.rank_tier)+1]['name']
 
             # mod 100
             elo_needed = 100-(int(elo) % 100)
 
-        if not match_crawler.user_exists(puuid):
+        if not match_crawler.user_exists(player.puuid):
             await ctx.send(
                 embed=ut.make_embed(
                     name='Error:',
@@ -158,7 +153,7 @@ class History(commands.Cog):
             )
             return
 
-        elif not match_crawler.get_tracked_status(puuid):
+        elif not match_crawler.get_tracked_status(player.puuid):
             await ctx.send(
                 embed=ut.make_embed(
                     name='Error:',
@@ -171,8 +166,8 @@ class History(commands.Cog):
 
         else:
             days = 7
-            matches = match_crawler.matches_within_time(puuid, days)
-            diff = match_crawler.get_elo_over_matches(puuid, matches)
+            matches = match_crawler.matches_within_time(player.puuid, days)
+            diff = match_crawler.get_elo_over_matches(player.puuid, matches)
 
             if diff > 0:
                 color = ut.green

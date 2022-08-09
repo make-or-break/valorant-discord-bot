@@ -19,6 +19,14 @@ def add_player(id, elo, rank, rank_tier, username, tagline, puuid, session=db.op
     session.commit()
 
 
+def delete_player(id, session=db.open_session()):
+    """
+    Delete the player from the database
+    """
+    session.query(db.Player).filter(db.Player.id == id).delete()
+    session.commit()
+
+
 def update_player(id, elo, rank, rank_tier, username, tagline, puuid, session=db.open_session()):
     """
     Update the player in the database

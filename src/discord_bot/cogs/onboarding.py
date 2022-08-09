@@ -311,6 +311,35 @@ class Onboarding(commands.Cog):
                 await self.add_role(member=m, rank_tier=db.get_player(ctx.author.id).rank_tier)
 
 
+    @commands.command(name='delete', help='Delete your Valorant account from our database.')
+    async def delete(self, ctx, *params):
+        """!
+        Delete your Valorant Account from our database.
+        @param ctx Context of the message
+        @param params further arguments
+        """
+
+        # Send Error and break if command is not executed in private chat
+        if not ctx.channel.type == discord.ChannelType.private:
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='Error:',
+                    value='This command is only available in private chat. Please send me a DM :)',
+                    color=ut.red
+                )
+            )
+            return
+
+        db.delete_player(ctx.author.id)
+        logger.info(f'Player {ctx.author.name} deleted from db.')
+        await ctx.send(
+            embed=ut.make_embed(
+                name='Success',
+                value='Your account was deleted from our database.',
+                color=ut.green
+            )
+        )
+
     # Event listener, wich does an onboarding flow if a new user is joining.
     @commands.Cog.listener()
     async def on_member_join(self, member):

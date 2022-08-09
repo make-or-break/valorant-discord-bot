@@ -64,11 +64,8 @@ async def on_ready():
         # this function makes sure, a role for every rank exists
         await create_roles(g)
 
-    logger.info(f'---\nINFORMATION:')
-    logger.info(f"Bot '{bot.user.name}' has connected, active on {len(bot.guilds)} guilds:\n{guild_string}")
-    for player in db.get_all_players():
-        logger.info(f'member {player.username}#{player.tagline} ({player.rank}) is using the bot ({player.id})')
-    logger.info(f'---')
+    logger.info(
+        f"Bot '{bot.user.name}' has connected, active on {len(bot.guilds)} guilds:\n{guild_string}")
 
     await bot.change_presence(
         activity=discord.Activity(type=discord.ActivityType.watching, name=ACTIVITY_NAME))
@@ -90,6 +87,13 @@ async def on_ready():
         logger.info(f'Trying to load {extension} from {__package__}!')
         await bot.load_extension(extension, package=__package__)
         logger.info(f'Extention {extension} loaded!')
+
+    logger.info(f'---Current members---')
+    for player in db.get_all_players():
+        logger.info(
+            f'member {player.username}#{player.tagline} ({player.rank}) is using the bot ({player.id})')
+    logger.info(f'---Good luck agent!---')
+
 
 async def start_bot(token=None):
     async with bot:

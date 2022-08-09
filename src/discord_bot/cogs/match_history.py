@@ -12,7 +12,8 @@ from database import sql_statements as db
 
 class History(commands.Cog):
     """
-    This cog is responsible for the match history of a player
+    Match History features:
+    get some basic statistics abouut your performance in ranked!
     """
 
     def __init__(self, bot):

@@ -1,3 +1,5 @@
+import time
+
 import discord
 import match_crawler
 import valorant
@@ -169,9 +171,28 @@ class History(commands.Cog):
             return
 
         else:
+
             days = 7
+
+            # seconds = days * 24 * 60 * 60
+            # compare_to = time.time() - seconds
+            # matches_total = len(
+            #     match_crawler.get_matches_by_puuid(player.puuid)
+            # )
+            # oldest_match_date = int(
+            #     match_crawler.get_match_date(player.puuid, matches_total))
+
+            # if player.puuid == '':
+            #     matches = matches_total
+            #     match_elo = match_crawler.get_match_last(
+            #         player.puuid, matches).match_elo
+            #     logger.info(f'{match_elo}')
+
+            # else:
+
             matches = match_crawler.matches_within_time(player.puuid, days)
-            diff = match_crawler.get_elo_over_matches(player.puuid, matches)
+            diff = match_crawler.get_elo_over_matches(
+                player.puuid, matches)
 
             if diff > 0:
                 color = ut.green

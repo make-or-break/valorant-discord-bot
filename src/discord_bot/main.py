@@ -64,10 +64,11 @@ async def on_ready():
         # this function makes sure, a role for every rank exists
         await create_roles(g)
 
+    logger.info(f'---\nINFORMATION:')
     logger.info(f"Bot '{bot.user.name}' has connected, active on {len(bot.guilds)} guilds:\n{guild_string}")
-
     for player in db.get_all_players():
         logger.info(f'member {player.username}#{player.tagline} ({player.rank}) is using the bot ({player.id})')
+    logger.info(f'---')
 
     await bot.change_presence(
         activity=discord.Activity(type=discord.ActivityType.watching, name=ACTIVITY_NAME))

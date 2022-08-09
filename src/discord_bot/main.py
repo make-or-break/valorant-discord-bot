@@ -67,7 +67,7 @@ async def on_ready():
     logger.info(f"Bot '{bot.user.name}' has connected, active on {len(bot.guilds)} guilds:\n{guild_string}")
 
     for player in db.get_all_players():
-        logger.info(f'member {player.username}#{player.tagline} ({player.rank}) is using the bot')
+        logger.info(f'member {player.id} - {player.username}#{player.tagline} ({player.rank}) is using the bot')
 
     await bot.change_presence(
         activity=discord.Activity(type=discord.ActivityType.watching, name=ACTIVITY_NAME))

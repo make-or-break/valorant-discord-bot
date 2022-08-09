@@ -122,6 +122,9 @@ class History(commands.Cog):
                 )
             )
         else:
+            # get corresponding player from db
+            player = db.get_player(ctx.author.id)
+
             # get corresponding puuid from db
             puuid = (db.get_player(ctx.author.id).puuid)
 
@@ -185,7 +188,7 @@ class History(commands.Cog):
                 embed=ut.make_embed(
                     name='elo:',
                     value=(
-                        f'{ctx.author.mention} within the last {days} days:\n'
+                        f'{ctx.author.mention} ({player.username}#{player.tagline}) within the last {days} days:\n'
                         f'diff: {diff} RR\n'
                         f'matches: {matches}\n'
                         f'rank: {rank} ({elo} RR)\n'

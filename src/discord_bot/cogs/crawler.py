@@ -23,19 +23,21 @@ class Crawler(commands.Cog):
         self.bot: commands.Bot = bot
         self.crawler_task.start()
 
-
-    # Task wich crawles the stats of the tracked players and updates the database
     @tasks.loop(minutes=20.0)
     async def crawler_task(self):
+        """
+        Task wich crawles the stats of the tracked players and updates the database.
+        Runs every 20 minutes.
+        :return: None
+        """
+
         logger.info('Crawling players...')
 
         for player in db.get_all_players():
 
-            # logger.info(f'Crawling {player.username}...')
-            player_json = valorant.get_player_json_by_puuid(player.puuid)
-
-            if player_json is False:
-                logger.info(f'API request for {player.username} failed')
+            # get player_json & check if json is valid
+            if not (player_json := valorant.get_player_json_by_puuid(player.puuid)):
+                logger.info(f'API request for {player.username}#{player.tagline} failed - skipping')
 
             else:
 

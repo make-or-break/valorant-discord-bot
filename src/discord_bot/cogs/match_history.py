@@ -27,9 +27,10 @@ class History(commands.Cog):
     @commands.command(name='track', aliases=['tracking'])
     async def track_command(self, ctx):
         """
-        This command adds the user to the tracking list.
-        Once an hour, the crawler will crawl all new matches of a player.
-        This Feature is opt in!
+        This command toggles the tracking option.
+        When enabled, the crawler will crawl all new matches every 15 minutes.
+        It's needed for the '!elo' command.
+        Your match history will be saved in the database.
         """
 
         # Send Error and break if command is not executed in private chat
@@ -109,7 +110,9 @@ class History(commands.Cog):
     @commands.command(name='elo')
     async def elo_command(self, ctx):
         """
-        send elo stats to user
+        Receive some basic statistics about your performance in ranked.
+        Data will be updated every 15 minutes.
+        Tracking needs to be enabled.
         """
 
         # tell user to enable connect the valorant account first

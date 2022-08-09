@@ -40,12 +40,13 @@ class Crawler(commands.Cog):
                 logger.info(f'API request for {player.username}#{player.tagline} failed - skipping')
 
             else:
-
-                # check if response is valid
+                # rank_tier == 0 is only valid, if the player did not have a rank_tier before.
                 if valorant.get_rank_tier(player_json) == 0:
                     if player.rank_tier != 0:
-                        logger.info(f'API request for {player.username} contains no rank_tier')
+                        logger.info(f'API request for {player.username} contains no rank_tier - skipping')
 
+
+                # ONLY IS EXECUTED IF PLAYER_JSON IS VALID - insert additional checks above this line
                 else:
                     rank_tier_new = valorant.get_rank_tier(player_json)
                     rank_tier_before = player.rank_tier

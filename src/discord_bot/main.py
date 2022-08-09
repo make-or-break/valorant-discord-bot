@@ -1,6 +1,5 @@
 #!/bin/env python
 import os
-from database import sql_statements as db
 
 import discord
 import valorant
@@ -11,6 +10,7 @@ from .environment import ACTIVITY_NAME
 from .environment import PREFIX
 from .environment import TOKEN
 from .log_setup import logger
+from database import sql_statements as db
 # setup of logging and env-vars
 # logging must be initialized before environment, to enable logging in environment
 
@@ -81,8 +81,8 @@ async def on_ready():
         '.cogs.onboarding',
         '.cogs.crawler',
         '.cogs.help',
-        '.cogs.match_history',
-        '.cogs.activity'
+        '.cogs.match_history'
+        # '.cogs.activity'
     ]
 
     for extension in initial_extensions:

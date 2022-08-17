@@ -172,7 +172,7 @@ class History(commands.Cog):
 
         else:
 
-            days = 3
+            days = 7
 
             # seconds = days * 24 * 60 * 60
             # compare_to = time.time() - seconds

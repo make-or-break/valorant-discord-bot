@@ -218,6 +218,9 @@ class History(commands.Cog):
                 )
             )
 
+            # delete command message
+            await ctx.message.delete()
+
             return
 
 

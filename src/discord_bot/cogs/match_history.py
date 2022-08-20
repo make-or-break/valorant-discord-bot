@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 
 import discord
 import match_crawler
@@ -204,6 +205,9 @@ class History(commands.Cog):
                 color = ut.red
                 diff = f'{diff}'
 
+            # act info
+            season, season_name, act_end = valorant.current_season()
+
             await ctx.send(
                 embed=ut.make_embed(
                     name='elo:',
@@ -212,7 +216,8 @@ class History(commands.Cog):
                         f'diff: {diff} RR\n'
                         f'matches: {matches}\n'
                         f'rank: {rank} ({elo} RR)\n'
-                        f'next rank: {next_rank} ({elo_needed} RR needed)'
+                        f'next rank: {next_rank} ({elo_needed} RR needed)\n'
+                        f'{season_name} ends in {int(valorant.act_left()/60/60)} hours ({datetime.fromtimestamp(act_end).strftime("%m/%d/%Y, %H:%M:%S")})'
                     ),
                     color=color
                 )

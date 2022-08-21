@@ -5,10 +5,10 @@
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    custom-nixpkgs = {
-      url = "github:make-or-break/nixpkgs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # custom-nixpkgs = {
+    #   url = "github:make-or-break/nixpkgs";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
 
     flake-utils.url = "github:numtide/flake-utils";
 
@@ -124,9 +124,10 @@
         my-python = pkgs.python310;
         my-python-with-my-packages = my-python.withPackages (p: with p; [
           pycodestyle
-          self.inputs.custom-nixpkgs.packages.${system}.discordpy
+          # self.inputs.custom-nixpkgs.packages.${system}.discordpy
           self.inputs.valorant-match-history.packages.${system}.valorant-match-history
           self.inputs.valorant-utils.packages.${system}.valorant-utils
+          discordpy
           sqlalchemy
         ]);
 
@@ -160,8 +161,9 @@
                 self.inputs.valorant-match-history.packages.${system}.valorant-match-history
 
                 # discordpy 2.0.0a
-                self.inputs.custom-nixpkgs.packages.${system}.discordpy
+                # self.inputs.custom-nixpkgs.packages.${system}.discordpy
 
+                discordpy
                 sqlalchemy
 
               ];

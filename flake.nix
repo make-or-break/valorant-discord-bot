@@ -5,11 +5,6 @@
 
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
-    # custom-nixpkgs = {
-    #   url = "github:make-or-break/nixpkgs";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
-
     flake-utils.url = "github:numtide/flake-utils";
 
     valorant-utils = {

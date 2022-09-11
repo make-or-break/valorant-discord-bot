@@ -112,7 +112,7 @@ class History(commands.Cog):
 
     # TODO: add option to get elo of other user (when he has public elo enabled)
     @commands.command(name='elo')
-    async def elo_command(self, ctx):
+    async def elo_command(self, ctx, arg=None):
         """
         Receive some basic statistics about your performance in ranked.
         Data will be updated every 15 minutes.
@@ -131,6 +131,12 @@ class History(commands.Cog):
         else:
             # get corresponding player from db
             player = db.get_player(ctx.author.id)
+
+            # when user is being mentioned
+            # get the mentioned user
+            if arg is not None:
+                user = ctx.message.mentions[0]
+                player= db.get_player(user.id)
 
             # only continue if user has elo value
             if (elo := player.elo) is None:

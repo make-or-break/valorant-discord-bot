@@ -223,9 +223,9 @@ class History(commands.Cog):
                 )
             )
 
-            # delete command message
-            await ctx.message.delete()
-
+            # # delete command message
+            # if arg is None:
+            #     await ctx.message.delete()
             return
 
 

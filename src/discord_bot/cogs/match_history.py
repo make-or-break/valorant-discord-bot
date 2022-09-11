@@ -214,11 +214,16 @@ class History(commands.Cog):
             # act info
             season, season_name, act_end = valorant.current_season()
 
+            if arg is None:
+                user_mention = ctx.author.mention
+            else:
+                user_mention = user.mention
+
             await ctx.send(
                 embed=ut.make_embed(
                     name='elo:',
                     value=(
-                        f'{ctx.author.mention} ({player.username}#{player.tagline}) within the last {days} days:\n'
+                        f'{user_mention} ({player.username}#{player.tagline}) within the last {days} days:\n'
                         f'diff: {diff} RR\n'
                         f'matches: {matches}\n'
                         f'rank: {rank} ({elo} RR)\n'

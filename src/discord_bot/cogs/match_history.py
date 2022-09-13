@@ -110,6 +110,55 @@ class History(commands.Cog):
     # user needs to have tracking enabled
     ####################################################################################################################
 
+    @commands.command(name='demo')
+    async def demo_command(self, ctx, arg=None):
+
+        if arg is None:
+            logger.info(f'no arg')
+
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='no arg:',
+                    value=f'no argument',
+                    color=ut.red
+                )
+            )
+
+        else:
+            logger.info(f'arg: {arg}')
+
+            await ctx.send(
+                embed=ut.make_embed(
+                    name='arg:',
+                    value=f'argument: {arg}',
+                    color=ut.red
+                )
+            )
+
+            if ctx.message.mentions == []:
+                logger.info(f'no mention')
+
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='no mention:',
+                        value=f'no mention',
+                        color=ut.red
+                    )
+                )
+
+            else:
+                logger.info(f'mention: {ctx.message.mentions[0]}')
+
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='mention:',
+                        value=f'mention: {ctx.message.mentions[0]}',
+                        color=ut.red
+                    )
+                )
+
+
+
     # TODO: add option to get elo of other user (when he has public elo enabled)
     @commands.command(name='elo')
     async def elo_command(self, ctx, arg=None):
@@ -134,7 +183,8 @@ class History(commands.Cog):
 
             # when user is being mentioned
             # get the mentioned user
-            if arg is not None:
+
+            if arg is not None and ctx.message.mentions[0]:
                 user = ctx.message.mentions[0]
                 player= db.get_player(user.id)
 
@@ -214,10 +264,10 @@ class History(commands.Cog):
             # act info
             season, season_name, act_end = valorant.current_season()
 
-            if arg is None:
-                user_mention = ctx.author.mention
-            else:
+            if arg is not None and ctx.message.mentions[0]:
                 user_mention = user.mention
+            else:
+                user_mention = ctx.author.mention
 
             await ctx.send(
                 embed=ut.make_embed(

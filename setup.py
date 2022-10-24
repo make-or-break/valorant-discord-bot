@@ -15,9 +15,9 @@ with open('src/discord_bot/__init__.py') as f:
         r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
 
 requires = [
-    "discord.py ~= 2.0.1",
-    "requests ~= 2.28.0",
-    "sqlalchemy ~= 1.4.37",
+    "discord.py>=2.0.1",
+    "requests>=2.28.0",
+    "sqlalchemy>=1.4.37",
 ]
 
 setup(

@@ -42,7 +42,11 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
         'Typing :: Typed',
     ],
-    install_requires=['sqlalchemy ~= 1.4.37'],
+    install_requires=[
+        'discord.py ~= 2.0.1',
+        'requests ~= 2.28.0',
+        'sqlalchemy ~= 1.4.37'
+    ],
     package_dir={'': 'src/'},
     packages=find_packages(where='src/'),
     entry_points={'console_scripts': [

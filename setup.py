@@ -14,6 +14,12 @@ with open('src/discord_bot/__init__.py') as f:
     version = re.search(
         r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]', f.read(), re.MULTILINE).group(1)
 
+requires = [
+    "discord.py ~= 2.0.1",
+    "requests ~= 2.28.0",
+    "sqlalchemy ~= 1.4.37",
+]
+
 setup(
     name='valorant-discord-bot',
     version=version,
@@ -42,11 +48,7 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
         'Typing :: Typed',
     ],
-    install_requires=[
-        'discord.py ~= 2.0.1',
-        'requests ~= 2.28.0',
-        'sqlalchemy ~= 1.4.37'
-    ],
+    install_requires=requires,
     package_dir={'': 'src/'},
     packages=find_packages(where='src/'),
     entry_points={'console_scripts': [

@@ -115,30 +115,11 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-
-        my-python = pkgs.python310;
-        my-python-with-my-packages = my-python.withPackages (p: with p; [
-          pycodestyle
-          # self.inputs.custom-nixpkgs.packages.${system}.discordpy
-          self.inputs.valorant-match-history.packages.${system}.valorant-match-history
-          self.inputs.valorant-utils.packages.${system}.valorant-utils
-          discordpy
-          sqlalchemy
-        ]);
-
       in
       rec {
 
         # Use nixpkgs-fmt for `nix fmt'
         formatter = pkgs.nixpkgs-fmt;
-
-        # nix develop
-        devShell = pkgs.mkShell {
-          buildInputs = with pkgs; [
-            pre-commit
-            my-python-with-my-packages
-          ];
-        };
 
         defaultPackage = packages.valorant-discord-bot;
         packages = flake-utils.lib.flattenTree rec {
@@ -154,9 +135,6 @@
                 # flake inputs
                 self.inputs.valorant-utils.packages.${system}.valorant-utils
                 self.inputs.valorant-match-history.packages.${system}.valorant-match-history
-
-                # discordpy 2.0.0a
-                # self.inputs.custom-nixpkgs.packages.${system}.discordpy
 
                 discordpy
                 sqlalchemy
@@ -176,24 +154,6 @@
                 maintainers = with maintainers; [ mayniklas ];
               };
             };
-
-          # Documenation for this feature: https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/docker/examples.nix
-          # nix build .#docker-image
-          # docker load < result
-          docker-image = pkgs.dockerTools.buildLayeredImage {
-            name = "valorant-discord-bot";
-            # needed so we can enter the container using bash
-            contents = [
-              pkgs.coreutils
-              pkgs.bash
-            ];
-            config = {
-              Cmd = [ "${self.packages.${system}.valorant-discord-bot}/bin/valorant-discord-bot" ];
-              Env = [
-                "TOKEN=discord_token"
-              ];
-            };
-          };
 
         };
 

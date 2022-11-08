@@ -26,4 +26,16 @@ jobs:
       # build package
       - name: nix build .#valorant-discord-bot
         run: |
-          nix build .#valorant-discord-bot
+          nix build .#valorant-discord-bot -o current
+
+      - name: nix flake update
+        run: |
+          nix flake update
+
+      - name: nix build updated .#valorant-discord-bot
+        run: |
+          nix build .#valorant-discord-bot -o updated
+
+      - name: compare outputs
+        run: |
+          nix store diff-closures $(readlink -f current) $(readlink -f updated)

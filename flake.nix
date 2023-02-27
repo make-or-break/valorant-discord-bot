@@ -136,7 +136,7 @@
                 self.inputs.valorant-utils.packages.${system}.valorant-utils
                 self.inputs.valorant-match-history.packages.${system}.valorant-match-history
 
-                discordpy
+                (discordpy.override { withVoice = false; })
                 sqlalchemy
 
               ];

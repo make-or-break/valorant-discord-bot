@@ -157,9 +157,8 @@ class History(commands.Cog):
                     )
                 )
 
-
-
     # TODO: add option to get elo of other user (when he has public elo enabled)
+
     @commands.command(name='elo')
     async def elo_command(self, ctx, arg=None):
         """
@@ -186,7 +185,7 @@ class History(commands.Cog):
 
             if arg is not None and ctx.message.mentions[0]:
                 user = ctx.message.mentions[0]
-                player= db.get_player(user.id)
+                player = db.get_player(user.id)
 
             # only continue if user has elo value
             if (elo := player.elo) is None:
@@ -250,6 +249,7 @@ class History(commands.Cog):
             matches = match_crawler.matches_within_time(player.puuid, days)
             diff = match_crawler.get_elo_over_matches(
                 player.puuid, matches)
+            wins, losses = match_crawler.get_wins_losses(player.puuid, matches)
 
             if diff > 0:
                 color = ut.green
@@ -275,7 +275,7 @@ class History(commands.Cog):
                     value=(
                         f'{user_mention} ({player.username}#{player.tagline}) within the last {days} days:\n'
                         f'diff: {diff} RR\n'
-                        f'matches: {matches}\n'
+                        f'matches: {matches} ({wins}W/{losses}L)\n'
                         f'rank: {rank} ({elo} RR)\n'
                         f'next rank: {next_rank} ({elo_needed} RR needed)\n'
                         f'{season_name} ends in {int(valorant.act_left()/60/60)} hours ({datetime.fromtimestamp(act_end).strftime("%m/%d/%Y, %H:%M:%S")})'

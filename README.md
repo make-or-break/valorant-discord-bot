@@ -44,30 +44,35 @@ export TOKEN="<your-API-token>"
 {
   inputs.discord-bot-valorant = {
     url = "github:make-or-break/valorant-discord-bot";
-    inputs = {
-      # use the nixpkgs defined in this flake!
-      # python3Packages.requests is currently broken!
-      # nixpkgs.follows = "nixpkgs";
-      flake-utils.follows = "flake-utils";
-    };
   };
 }
 ```
 
-2. Enable the service in your configuration:
+2. Enable the services in your configuration:
 
 ```nix
 { discord-bot-valorant, ... }: {
 
-  imports = [ discord-bot-valorant.nixosModules.default ];
+  imports = [
+    # A discord bot for valorant communities
+    # https://github.com/make-or-break/valorant-discord-bot
+    discord-bot-valorant.nixosModules.valorant-discord-bot
+    discord-bot-valorant.nixosModules.valorant-match-history
+  ];
 
-  services.valorant-discord-bot = {
-    enable = true;
-    user = "valorant-discord-bot";
-    group = "valorant-discord-bot";
-    dataDir = "/var/lib/valorant-discord-bot";
-    envfile = "/var/src/secrets/valorant-discord-bot/envfile";
+  # nix flake lock --update-input discord-bot-valorant
+  services = {
+    valorant-discord-bot = {
+      enable = true;
+      dataDir = "/var/lib/valorant";
+      envfile = "/var/src/secrets/valorant/envfile";
+    };
+    valorant-match-history = {
+      enable = true;
+      dataDir = "/var/lib/valorant";
+    };
   };
+
 }
 ```
 

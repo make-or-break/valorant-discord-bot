@@ -52,11 +52,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1677666928,
-        "narHash": "sha256-+Yp/qklK2lKnDoInFpNAm0kpJKvLkJu5U//xkHF0Sko=",
+        "lastModified": 1677669333,
+        "narHash": "sha256-Ong/qFPqGkblSSbFxjp8q6Wms4vZZoQLjCT9wrGt95Q=",
         "owner": "make-or-break",
         "repo": "valorant-match-history",
-        "rev": "e127ecce50d528c942c62ffd2753a3f1d4b2ed66",
+        "rev": "3905820d16752f5e6de4a4f56f06061c46a20226",
         "type": "github"
       },
       "original": {
@@ -75,11 +75,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1677666918,
-        "narHash": "sha256-5bJRDLmVQs94BGmBIhgHYoxAXvQvQygD8Yjfec17WEE=",
+        "lastModified": 1677671371,
+        "narHash": "sha256-J2D1UgNgysd9caj1k5zIHeH8fboUkQObo7Q1L7+wack=",
         "owner": "make-or-break",
         "repo": "valorant-utils",
-        "rev": "ee8356689c14fcb54ca89660f6bd647e905332dc",
+        "rev": "f3efdc0a6ddb464abc956c88c82ca5cde4c335c8",
         "type": "github"
       },
       "original": {

@@ -15,11 +15,9 @@
 
     valorant-match-history = {
       url = "github:make-or-break/valorant-match-history";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-        valorant-utils.follows = "valorant-utils";
-      };
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+      inputs.valorant-utils.follows = "valorant-utils";
     };
 
 

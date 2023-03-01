@@ -284,9 +284,12 @@ class History(commands.Cog):
                         f'matches: {matches} ({wins}W/{losses}L)\n'
                         f'rank: {rank} ({elo} RR)\n'
                         f'next rank: {next_rank} ({elo_needed} RR needed)\n'
-                        f'highest this season: {best_elo_match_season.match_elo} RR - {valorant.get_name_rank_rr(best_elo_match_season.match_elo)} ({datetime.fromtimestamp(int(best_elo_match_season.match_start))+int(best_elo_match_season.match_length/1000/60).strftime("%m/%d/%Y, %H:%M:%S")})\n'
-                        f'highest all time: {best_elo_match.match_elo} RR - {valorant.get_name_rank_rr(best_elo_match.match_elo)} ({datetime.fromtimestamp(int(best_elo_match.match_start))+int(best_elo_match.match_length/1000/60).strftime("%m/%d/%Y, %H:%M:%S")})\n'
                         f'{season_name} ends in {int(valorant.act_left()/60/60)} hours ({datetime.fromtimestamp(act_end).strftime("%m/%d/%Y, %H:%M:%S")})'
+                        f'\n'
+                        f'--------\n'
+                        f'records:\n'
+                        f'highest this season: {best_elo_match_season.match_elo} RR - {valorant.get_name_rank_rr(best_elo_match_season.match_elo)} ({datetime.fromtimestamp(match_crawler.get_end_of_match(best_elo_match_season)).strftime("%m/%d/%Y, %H:%M:%S")})\n'
+                        f'highest all time: {best_elo_match.match_elo} RR - {valorant.get_name_rank_rr(best_elo_match.match_elo)} ({datetime.fromtimestamp(match_crawler.get_end_of_match(best_elo_match)).strftime("%m/%d/%Y, %H:%M:%S")})\n'
                     ),
                     color=color
                 )

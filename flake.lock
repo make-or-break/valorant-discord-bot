@@ -52,11 +52,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1677673186,
-        "narHash": "sha256-6V0SILDBkKk7Px+/uJrD0dYkDrF09EHLbKLKpziHMIg=",
+        "lastModified": 1679826971,
+        "narHash": "sha256-f8arQ1QOYRbzGyyZjPKi3N3/crp6ZJ4dqMcdkX76b+Y=",
         "owner": "make-or-break",
         "repo": "valorant-match-history",
-        "rev": "6199f31b5bb28fd2fc883fd0ac2c2174798457f8",
+        "rev": "133f47a1bf32ff13986e457f7f540414962d7ca7",
         "type": "github"
       },
       "original": {

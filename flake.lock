@@ -1,12 +1,15 @@
 {
   "nodes": {
     "flake-utils": {
+      "inputs": {
+        "systems": "systems"
+      },
       "locked": {
-        "lastModified": 1678901627,
-        "narHash": "sha256-U02riOqrKKzwjsxc/400XnElV+UtPUQWpANPlyazjH0=",
+        "lastModified": 1687171271,
+        "narHash": "sha256-BJlq+ozK2B1sJDQXS3tzJM5a+oVZmi1q0FlBK/Xqv7M=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "93a2b84fc4b70d9e089d029deacc3583435c2ed6",
+        "rev": "abfb11bd1aec8ced1c9bb9adfe68018230f4fb3c",
         "type": "github"
       },
       "original": {
@@ -17,11 +20,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1679705136,
-        "narHash": "sha256-MDlZUR7wJ3PlPtqwwoGQr3euNOe0vdSSteVVOef7tBY=",
+        "lastModified": 1686960236,
+        "narHash": "sha256-AYCC9rXNLpUWzD9hm+askOfpliLEC9kwAo7ITJc4HIw=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "8f40f2f90b9c9032d1b824442cfbbe0dbabd0dbd",
+        "rev": "04af42f3b31dba0ef742d254456dc4c14eedac86",
         "type": "github"
       },
       "original": {
@@ -39,6 +42,21 @@
         "valorant-utils": "valorant-utils"
       }
     },
+    "systems": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-systems",
+        "repo": "default",
+        "type": "github"
+      }
+    },
     "valorant-match-history": {
       "inputs": {
         "flake-utils": [
@@ -52,11 +70,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1679826971,
-        "narHash": "sha256-f8arQ1QOYRbzGyyZjPKi3N3/crp6ZJ4dqMcdkX76b+Y=",
+        "lastModified": 1687172202,
+        "narHash": "sha256-bQHiFAdCHVV2RjgxXDLOZzk+6MMYWJIAgkYwuuSdsyQ=",
         "owner": "make-or-break",
         "repo": "valorant-match-history",
-        "rev": "133f47a1bf32ff13986e457f7f540414962d7ca7",
+        "rev": "cd9dbb3ea1ce0f8eadf999e2470015a9315ada28",
         "type": "github"
       },
       "original": {
@@ -75,11 +93,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1677671371,
-        "narHash": "sha256-J2D1UgNgysd9caj1k5zIHeH8fboUkQObo7Q1L7+wack=",
+        "lastModified": 1687172075,
+        "narHash": "sha256-ACBgMqAHgDcF3cnYy+o4HFRx5SFpg+aIId0G7F5QSac=",
         "owner": "make-or-break",
         "repo": "valorant-utils",
-        "rev": "f3efdc0a6ddb464abc956c88c82ca5cde4c335c8",
+        "rev": "99667faa6cfad49ef7c5260d3714230709a5c0ae",
         "type": "github"
       },
       "original": {

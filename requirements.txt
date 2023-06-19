@@ -1,5 +1,5 @@
 discord.py ~= 2.0.1
-pre-commit ~= 3.2.1
+pre-commit ~= 3.3.3
 pycodestyle ~= 2.10.0
 requests ~= 2.28.1
 setuptools ~= 67.6.0

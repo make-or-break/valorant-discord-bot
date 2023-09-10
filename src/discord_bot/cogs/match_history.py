@@ -252,8 +252,11 @@ class History(commands.Cog):
 
             if matches > 0:
                 diff = match_crawler.get_elo_over_matches(player.puuid, matches)
+                logger.info(f'{player.username}#{player.tagline} - {diff} elo diff within the last {days} days')
                 wins, losses = match_crawler.get_wins_losses(player.puuid, matches)
+                logger.info(f'{player.username}#{player.tagline} - {wins} wins and {losses} losses within the last {days} days')
                 best_elo_match_season = match_crawler.get_highest_elo_match_season(player.puuid)
+                logger.info(f'{player.username}#{player.tagline} - {best_elo_match_season.match_elo} elo in best match within the last {days} days')
             else:
                 diff, wins, losses, best_elo_match_season = 0, 0, 0, 0
 

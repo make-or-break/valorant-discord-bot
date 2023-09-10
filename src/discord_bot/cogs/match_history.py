@@ -247,15 +247,15 @@ class History(commands.Cog):
             # else:
 
             matches = match_crawler.matches_within_time(player.puuid, days)
-            diff = match_crawler.get_elo_over_matches(
-                player.puuid, matches)
-            wins, losses = match_crawler.get_wins_losses(player.puuid, matches)
+
+            if matches > 0:
+                diff = match_crawler.get_elo_over_matches(player.puuid, matches)
+                wins, losses = match_crawler.get_wins_losses(player.puuid, matches)
+                best_elo_match_season = match_crawler.get_highest_elo_match_season(player.puuid)
+            else:
+                diff, wins, losses, best_elo_match_season = 0, 0, 0, 0
 
             best_elo_match = match_crawler.get_highest_elo_match(player.puuid)
-
-            best_elo_match_season = match_crawler.get_highest_elo_match_season(
-                player.puuid
-            )
 
             if diff > 0:
                 color = ut.green
@@ -275,25 +275,42 @@ class History(commands.Cog):
             else:
                 user_mention = ctx.author.mention
 
-            await ctx.send(
-                embed=ut.make_embed(
-                    name='elo:',
-                    value=(
-                        f'{user_mention} ({player.username}#{player.tagline}) within the last {days} days:\n'
-                        f'diff: {diff} RR\n'
-                        f'matches: {matches} ({wins}W/{losses}L)\n'
-                        f'rank: {rank} ({elo} RR)\n'
-                        f'next rank: {next_rank} ({elo_needed} RR needed)\n'
-                        f'{season_name} ends in {int(valorant.act_left()/60/60)} hours ({datetime.fromtimestamp(act_end).strftime("%m/%d/%Y, %H:%M:%S")})'
-                        f'\n'
-                        f'--------\n'
-                        f'records:\n'
-                        f'highest this season: {best_elo_match_season.match_elo} RR - {valorant.get_name_rank_rr(best_elo_match_season.match_elo)} ({datetime.fromtimestamp(match_crawler.get_end_of_match(best_elo_match_season)).strftime("%m/%d/%Y, %H:%M:%S")})\n'
-                        f'highest all time: {best_elo_match.match_elo} RR - {valorant.get_name_rank_rr(best_elo_match.match_elo)} ({datetime.fromtimestamp(match_crawler.get_end_of_match(best_elo_match)).strftime("%m/%d/%Y, %H:%M:%S")})\n'
-                    ),
-                    color=color
+            if matches > 0:
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='elo:',
+                        value=(
+                            f'{user_mention} ({player.username}#{player.tagline}) within the last {days} days:\n'
+                            f'diff: {diff} RR\n'
+                            f'matches: {matches} ({wins}W/{losses}L)\n'
+                            f'rank: {rank} ({elo} RR)\n'
+                            f'next rank: {next_rank} ({elo_needed} RR needed)\n'
+                            f'{season_name} ends in {int(valorant.act_left()/60/60)} hours ({datetime.fromtimestamp(act_end).strftime("%m/%d/%Y, %H:%M:%S")})'
+                            f'\n'
+                            f'--------\n'
+                            f'records:\n'
+                            f'highest this season: {best_elo_match_season.match_elo} RR - {valorant.get_name_rank_rr(best_elo_match_season.match_elo)} ({datetime.fromtimestamp(match_crawler.get_end_of_match(best_elo_match_season)).strftime("%m/%d/%Y, %H:%M:%S")})\n'
+                            f'highest all time: {best_elo_match.match_elo} RR - {valorant.get_name_rank_rr(best_elo_match.match_elo)} ({datetime.fromtimestamp(match_crawler.get_end_of_match(best_elo_match)).strftime("%m/%d/%Y, %H:%M:%S")})\n'
+                        ),
+                        color=color
+                    )
                 )
-            )
+            else:
+                await ctx.send(
+                    embed=ut.make_embed(
+                        name='elo:',
+                        value=(
+                            f'{user_mention} ({player.username}#{player.tagline}):\n'
+                            f'rank: {rank} ({elo} RR)\n'
+                            f'next rank: {next_rank} ({elo_needed} RR needed)\n'
+                            f'--------\n'
+                            f'records:\n'
+                            f'highest all time: {best_elo_match.match_elo} RR - {valorant.get_name_rank_rr(best_elo_match.match_elo)} ({datetime.fromtimestamp(match_crawler.get_end_of_match(best_elo_match)).strftime("%m/%d/%Y, %H:%M:%S")})\n'
+                        ),
+                        color=color
+                    )
+                )
+
 
             # # delete command message
             # if arg is None:

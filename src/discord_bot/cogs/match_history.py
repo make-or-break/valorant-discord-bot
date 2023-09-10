@@ -247,6 +247,8 @@ class History(commands.Cog):
             # else:
 
             matches = match_crawler.matches_within_time(player.puuid, days)
+            
+            logger.info(f'{player.username}#{player.tagline} - {matches} matches within the last {days} days')
 
             if matches > 0:
                 diff = match_crawler.get_elo_over_matches(player.puuid, matches)
